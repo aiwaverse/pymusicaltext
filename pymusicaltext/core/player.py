@@ -15,6 +15,12 @@ class Player:
         self.__notes: Union[mido.MetaMessage, mido.Message] = []
         self.__instrument: int = 0
         self.__octave: int = 3
+
+    def __change_instrument(self) -> mido.MetaMessage:
+        """
+        this functions generates a meta-message that changes the midi instrument of the track
+        """
+        return mido.MetaMessage("program_change", program=self.__instrument)
     
     @staticmethod
     def play_midi_file(midi_file: str) -> None:
