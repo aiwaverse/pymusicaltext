@@ -1,7 +1,12 @@
 #%%
+from os import environ
 from typing import Union
-import pygame
+
 import mido
+
+environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
+import pygame
+
 
 class Player:
     def __init__(self) -> None:
@@ -21,7 +26,7 @@ class Player:
         this functions generates a meta-message that changes the midi instrument of the track
         """
         return mido.MetaMessage("program_change", program=self.__instrument)
-    
+
     @staticmethod
     def play_midi_file(midi_file: str) -> None:
         """
@@ -38,4 +43,6 @@ class Player:
         while pygame.mixer.music.get_busy():
             # check if playback has finished
             clock.tick(30)
+
+
 # %%
