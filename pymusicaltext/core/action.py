@@ -3,7 +3,7 @@ from random import choice
 from mido import MetaMessage
 
 
-class Action():
+class Action:
     def __init__(self, act: str) -> None:
         self.__action = self.__decode_action(act)
 
@@ -33,7 +33,7 @@ class Action():
         self.__octave += 1
         if self.__octave > 7:
             self.__octave = 7
-    
+
     def __decrease_octave(self) -> None:
         self.__octave -= 1
         if self.__octave < 0:
@@ -44,10 +44,10 @@ class Action():
 
     def __decrease_bpm(self) -> None:
         self.__bpm -= 50
-        if self.__bpm  <= 4:
+        if self.__bpm <= 4:
             # this is the lowest acceptable interger to have as bpm, midi limitations with set_tempo
             self.__bpm = 4
-    
+
     def __increase_volume(self) -> None:
         # the volume will NOT be duplicated for now, this would cause the volume to be only at two states
         # this increases it by 10%
@@ -61,4 +61,4 @@ class Action():
 
     def __change_instrument(self) -> None:
         # a random instrument from 0 to 127, as midi standard
-        self.__instrument = choice(range(0,128))
+        self.__instrument = choice(range(0, 128))
