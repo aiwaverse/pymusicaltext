@@ -14,8 +14,11 @@ class Note:
         # volume needs to be decreased by one since we are using 1-128, while midi uses 0-127
         return [
             Message("note_on", note=self.__note, velocity=volume - 1, time=60),
-            Message("note_off", note=self.__note, velocity=volume, time=0),
+            Message("note_off", note=self.__note, velocity=volume - 1, time=0),
         ]
 
     def __decode_note(self, note: str) -> int:
+        """
+        this function will decode the note, a string, to the midi format
+        """
         raise NotImplementedError("TODO")
