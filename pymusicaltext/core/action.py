@@ -1,4 +1,5 @@
 from typing import Tuple, Union, List, Dict
+from random import choice
 from mido import MetaMessage
 
 
@@ -6,23 +7,24 @@ class Action():
     def __init__(self, act: str) -> None:
         self.__action = self.__decode_action(act)
 
-    def fill_info(self, volume, octave, bpm):
+    def fill_info(self, volume, octave, bpm, instrument):
         """
         this funciton should be called when "running" the action, and it takes the current player info
         """
         self.__volume = volume
         self.__octave = octave
         self.__bpm = bpm
+        self.__instrument = instrument
 
-    def execute(self) -> Tuple[int, int, int]:
+    def execute(self) -> Tuple[int, int, int, int]:
         """
         executes the action that the instance represents
-        return a tuple with (volume, octave, bpm)
+        return a tuple with (volume, octave, bpm, instrument)
         with possible modifications
         """
         to_run = self.__decode_action(self.__action)
         to_run()
-        return (self.__volume, self.__octave, self.__bpm)
+        return (self.__volume, self.__octave, self.__bpm, self.__instrument)
 
     def __decode_action(self, act):
         raise NotImplementedError("TODO")
@@ -56,3 +58,7 @@ class Action():
     def __decrease_volume(self) -> None:
         # called decrease to maintain an uniformity, but it resets the volume to 64
         self.__volume = 64
+
+    def __change_instrument(self) -> None:
+        # a random instrument from 0 to 127, as midi standard
+        self.__instrument = choice(range(0,128))
