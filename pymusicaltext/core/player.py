@@ -1,4 +1,5 @@
 #%%
+from typing import Union
 import pygame
 import mido
 
@@ -11,9 +12,9 @@ class Player:
         """
         self.__volume: int = 64
         self.__bpm: int = 120
-        self.__notes = []
+        self.__notes: Union[mido.MetaMessage, mido.Message] = []
         self.__instrument: int = 0
-        self.__octave = 3
+        self.__octave: int = 3
     
     @staticmethod
     def play_midi_file(midi_file: str) -> None:
