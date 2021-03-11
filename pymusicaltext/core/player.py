@@ -4,12 +4,16 @@ from typing import List, Union
 
 import mido
 
+from .action import Action
+from .note import Note
+from .parser import Parser
+
 environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 import pygame
 
 
 class Player:
-    def __init__(self, file_name: str) -> None:
+    def __init__(self, input_string: str, output_file_name: str) -> None:
         """
         initializes the basic parameters, the "medium" volume
         the basic bpm, volumes, initial notes, the first intrument from the midi table, middle octave
@@ -23,7 +27,44 @@ class Player:
         ] = self.__initial_midi_file()
         self.__instrument: int = 0
         self.__octave: int = 3
-        self.__file_name = file_name
+        self.__output_file_name = output_file_name
+        self.__input = input_string
+
+    def __parse_input(self) -> None:
+        """
+        parses the input string into the note/action tokens
+        """
+        tokens = [
+            "bpm+",
+            "bpm-",
+            "t+",
+            "t-",
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            " ",
+            "+",
+            "-",
+            "o",
+            "i",
+            "u",
+            "?",
+            ".",
+            "\n",
+        ]
+        p = Parser(self.__input, tokens)
+        self.__decoded_input = p.parse()
+
+    def __generate_notes(self) -> None:
+        """
+        this will use Note/Action to generate the notes that will go on the __notes list
+        """
+        raise NotImplementedError("TODO")
+
 
     def __initial_midi_file(self) -> mido.Message:
         """
@@ -58,7 +99,7 @@ class Player:
             mido.MetaMessage("end_of_track", time=self.__calculate_end_time())
         )
         save_file.tracks.append(self.__notes)
-        save_file.save(filename=self.__file_name)
+        save_file.save(filename=self.__output_file_name)
 
     @staticmethod
     def play_midi_file(midi_file: str) -> None:
