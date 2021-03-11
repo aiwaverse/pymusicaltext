@@ -3,7 +3,7 @@ from mido import Message
 
 
 class Note:
-    def __init__(self, note):
+    def __init__(self, note: str):
         self.__note = self.__decode_note(note)
 
     def play(self, octave: int, volume: int) -> List[Message]:

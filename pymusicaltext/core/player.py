@@ -7,9 +7,6 @@ from .action import Action
 from .note import Note
 from .parser import Parser
 
-environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
-import pygame
-
 
 class Player:
     def __init__(self, input_string: str, output_file_name: str) -> None:
@@ -101,7 +98,8 @@ class Player:
         """
         total_time = 0
         for msg in self.__notes:
-            total_time += msg.time
+            if hasattr(msg, "time"):
+                total_time += msg.time
         return total_time
 
     def __write_notes_to_file(self) -> None:
