@@ -74,7 +74,7 @@ class Player:
         self.__input = string
         self.__parse_input()
 
-    def __initial_midi_file(self) -> mido.Message:
+    def __initial_midi_file(self) -> List[mido.MetaMessage]:
         """
         a function that generates the basic meta_messages for the track
         """
