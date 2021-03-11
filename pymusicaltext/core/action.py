@@ -13,7 +13,9 @@ class Action:
         self.__bpm = bpm
         self.__instrument = instrument
 
-    def execute(self, meta_message: List[MetaMessage]) -> Tuple[int, int, int, int]:
+    def execute(
+        self, meta_message: List[MetaMessage]
+    ) -> Tuple[int, int, int, int]:
         """
         executes the action that the instance represents
         return a tuple with (volume, octave, bpm, instrument)
@@ -46,18 +48,21 @@ class Action:
     def __decrease_bpm(self) -> None:
         self.__bpm -= 50
         if self.__bpm <= 4:
-            # this is the lowest acceptable interger to have as bpm, midi limitations with set_tempo
+            # this is the lowest acceptable interger to have as bpm,
+            # midi limitations with set_tempo
             self.__bpm = 4
 
     def __increase_volume(self) -> None:
-        # the volume will NOT be duplicated for now, this would cause the volume to be only at two states
+        # the volume will NOT be duplicated for now, this would
+        # cause the volume to be only at two states
         # this increases it by 10%
         self.__volume = round(self.__volume * 1.1)
         if self.__volume > 128:
             self.__volume = 128
 
     def __decrease_volume(self) -> None:
-        # called decrease to maintain an uniformity, but it resets the volume to 64
+        # called decrease to maintain an uniformity,
+        # but it resets the volume to 64
         self.__volume = 64
 
     def __change_instrument(self) -> None:

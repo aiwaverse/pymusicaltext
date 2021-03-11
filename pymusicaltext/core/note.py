@@ -8,13 +8,25 @@ class Note:
 
     def play(self, octave: int, volume: int) -> List[Message]:
         """
-        this "plays" the note, returning a list of 2 elements with the on/off messages
+        this "plays" the note, returning a list of 2 elements
+        with the on/off messages
         important to note: velocity is the "loudness" of the song
         """
-        # volume needs to be decreased by one since we are using 1-128, while midi uses 0-127
+        # volume needs to be decreased by one since we are using 1-128
+        # while midi uses 0-127
         return [
-            Message("note_on", note=self.__note + octave, velocity=volume - 1, time=60),
-            Message("note_off", note=self.__note + octave, velocity=volume - 1, time=0),
+            Message(
+                "note_on",
+                note=self.__note + octave,
+                velocity=volume - 1,
+                time=60,
+            ),
+            Message(
+                "note_off",
+                note=self.__note + octave,
+                velocity=volume - 1,
+                time=0,
+            ),
         ]
 
     def __decode_note(self, note: str) -> int:

@@ -1,4 +1,3 @@
-#%%
 from os import environ
 from typing import List, Union
 
@@ -16,9 +15,11 @@ class Player:
     def __init__(self, input_string: str, output_file_name: str) -> None:
         """
         initializes the basic parameters, the "medium" volume
-        the basic bpm, volumes, initial notes, the first intrument from the midi table, middle octave
+        the basic bpm, volumes, initial notes, the first intrument from the
+        midi table, middle octave
         plus with the file_name passed to the construction
-        the basic octave is 3, to have the mid-note, as per usual of midi intruments
+        the basic octave is 3, to have the mid-note,
+        as per usual of midi intruments
         """
         self.__volume: int = 64
         self.__bpm: int = 120
@@ -62,7 +63,8 @@ class Player:
 
     def __generate_notes(self) -> None:
         """
-        this will use Note/Action to generate the notes that will go on the __notes list
+        this will use Note/Action to generate the notes
+        that will go on the __notes list
         """
         raise NotImplementedError("TODO")
 
@@ -80,18 +82,22 @@ class Player:
         """
         return [
             mido.MetaMessage("sequence_number", number=0, time=0),
-            mido.MetaMessage("track_name", name="pymusicaltext generated file", time=0),
+            mido.MetaMessage(
+                "track_name", name="pymusicaltext generated file", time=0
+            ),
         ]
 
     def __change_instrument(self) -> mido.MetaMessage:
         """
-        this functions generates a meta-message that changes the midi instrument of the track
+        this functions generates a meta-message that changes the
+         midi instrument of the track
         """
         return mido.MetaMessage("program_change", program=self.__instrument)
 
     def __calculate_end_time(self) -> int:
         """
-        uses the time attribute on every note to calculate the end_of_track time
+        uses the time attribute on every note
+        to calculate the end_of_track time
         """
         total_time = 0
         for msg in self.__notes:
@@ -100,7 +106,8 @@ class Player:
 
     def __write_notes_to_file(self) -> None:
         """
-        writes the notes to the file, adds an end_of_track meta message to the end too
+        writes the notes to the file, adds an
+        end_of_track meta message to the end too
         """
         save_file = mido.MidiFile()
         self.__notes.append(
@@ -109,22 +116,12 @@ class Player:
         save_file.tracks.append(self.__notes)
         save_file.save(filename=self.__output_file_name)
 
-    @staticmethod
-    def play_midi_file(midi_file: str) -> None:
-        """
-        stream music with mixer.music module in blocking manner
-        this will stream the sound from disk while playing
-        """
-        clock = pygame.time.Clock()
-        try:
-            pygame.mixer.music.load(midi_file)
-        except pygame.error:
-            print(f"File {midi_file} not found, error {pygame.get_error()}")
-            return
-        pygame.mixer.music.play()
-        while pygame.mixer.music.get_busy():
-            # check if playback has finished
-            clock.tick(30)
+    def play_notes(self, port: str) -> None:
+        file = mido.MidiFile()
+        file.tracks[0] = self.__notes
+        with mido.open_output(port) as p:
+            for msg in file.play():
+                p.send(msg)
 
 
 # %%
