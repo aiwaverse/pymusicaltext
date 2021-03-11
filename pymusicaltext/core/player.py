@@ -29,6 +29,7 @@ class Player:
         self.__octave: int = 3
         self.__output_file_name = output_file_name
         self.__input = input_string
+        self.__parse_input()
 
     def __parse_input(self) -> None:
         """
@@ -65,6 +66,13 @@ class Player:
         """
         raise NotImplementedError("TODO")
 
+    def load_string(self, string: str) -> None:
+        """
+        loads a new string into the object
+        useful for reading from a text box
+        """
+        self.__input = string
+        self.__parse_input()
 
     def __initial_midi_file(self) -> mido.Message:
         """
