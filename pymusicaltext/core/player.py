@@ -56,7 +56,7 @@ class Player:
             ".",
             "\n",
         ]
-        p = Parser(self.__input, tokens)
+        p = Parser(self.__input, tokens, return_not_matched=False)
         self.__decoded_input = p.parse()
 
     def __generate_notes(self) -> None:
@@ -64,7 +64,42 @@ class Player:
         this will use Note/Action to generate the notes
         that will go on the __notes list
         """
-        raise NotImplementedError("TODO")
+        note_tokens = [
+            "a",
+            "i",
+            "o",
+            "u",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            " ",
+            "?",
+            ".",
+        ]
+        previous_tok = ""
+        for tok in self.__decoded_input:
+            if tok in note_tokens:
+                # tok is a note
+                curr = Note(tok, self.__octave, self.__volume)
+            else:
+                # tok is an action
+                curr = Action(
+                    tok,
+                    self.__volume,
+                    self.__octave,
+                    self.__bpm,
+                    self.__instrument,
+                )
+                (
+                    self.__volume,
+                    self.__octave,
+                    self.__bpm,
+                    self.__instrument,
+                ) = curr.execute()
+            self.__notes += curr.generate_message()
 
     def load_string(self, string: str) -> None:
         """

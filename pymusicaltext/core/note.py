@@ -1,12 +1,15 @@
 from typing import Union, List
 from mido import Message
+from .midiunit import MidiUnit
 
 
-class Note:
-    def __init__(self, note: str):
+class Note(MidiUnit):
+    def __init__(self, note: str, octave: int, volume: int):
         self.__note = self.__decode_note(note)
+        self.__octave = octave
+        self.__volume = volume
 
-    def play(self, octave: int, volume: int) -> List[Message]:
+    def generate_message(self) -> List[Message]:
         """
         this "plays" the note, returning a list of 2 elements
         with the on/off messages
@@ -17,14 +20,14 @@ class Note:
         return [
             Message(
                 "note_on",
-                note=self.__note + octave,
-                velocity=volume - 1,
+                note=self.__note + self.__octave,
+                velocity=self.__volume - 1,
                 time=60,
             ),
             Message(
                 "note_off",
-                note=self.__note + octave,
-                velocity=volume - 1,
+                note=self.__note + self.__octave,
+                velocity=self.__volume - 1,
                 time=0,
             ),
         ]

@@ -1,21 +1,24 @@
 from typing import Tuple, Union, List, Dict
 from random import choice
 from mido import MetaMessage
+from .midiunit import MidiUnit
 
 
-class Action:
+class Action(MidiUnit):
     def __init__(
         self, act: str, volume: int, octave: int, bpm: int, instrument: int
     ) -> None:
-        self.__action = self.__decode_action(act)
+        self.__action = act
         self.__volume = volume
         self.__octave = octave
         self.__bpm = bpm
         self.__instrument = instrument
 
-    def execute(
-        self, meta_message: List[MetaMessage]
-    ) -> Tuple[int, int, int, int]:
+    def generate_message(self) -> List[MetaMessage]:
+        # TODO: make a funciton that generates the meta message, return a list for uniformity.
+        raise NotImplementedError("TODO")
+
+    def execute(self) -> Tuple[int, int, int, int]:
         """
         executes the action that the instance represents
         return a tuple with (volume, octave, bpm, instrument)
