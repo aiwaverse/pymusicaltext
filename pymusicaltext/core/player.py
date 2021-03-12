@@ -83,7 +83,10 @@ class Player:
         for tok in self.__decoded_input:
             if tok in note_tokens:
                 # tok is a note
-                curr = Note(tok, self.__octave, self.__volume)
+                if tok in "iou" and previous_tok in note_tokens:
+                    curr = Note(tok, self.__octave, self.__volume)
+                else:
+                    curr = Note(" ", self.__octave, self.__volume)
             else:
                 # tok is an action
                 curr = Action(
