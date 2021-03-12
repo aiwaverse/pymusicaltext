@@ -1,4 +1,5 @@
 from os import environ
+from os.path import splitext
 from typing import List, Union
 
 import mido
@@ -80,7 +81,7 @@ class Player:
         return [
             mido.MetaMessage("sequence_number", number=0, time=0),
             mido.MetaMessage(
-                "track_name", name="pymusicaltext generated file", time=0
+                "track_name", name=splitext(self.__output_file_name)[0], time=0
             ),
         ]
 
@@ -117,7 +118,7 @@ class Player:
     def play_notes(self, port: str) -> None:
         file = mido.MidiFile()
         file.tracks[0] = self.__notes
-        with mido.open_output(port) as p:
+        with mido.open_output(name=port) as p:
             for msg in file.play():
                 p.send(msg)
 
