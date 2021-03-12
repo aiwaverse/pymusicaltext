@@ -15,7 +15,8 @@ class Action(MidiUnit):
         self.__instrument = instrument
 
     def generate_message(self) -> List[MetaMessage]:
-        # TODO: make a funciton that generates the meta message, return a list for uniformity.
+        # TODO: make a funciton that generates the meta message,
+        # return a list for uniformity.
         raise NotImplementedError("TODO")
 
     def execute(self) -> Tuple[int, int, int, int]:

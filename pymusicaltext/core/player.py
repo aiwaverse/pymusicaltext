@@ -10,7 +10,9 @@ from .parser import Parser
 
 
 class Player:
-    def __init__(self, input_string: str, output_file_name: str) -> None:
+    def __init__(
+        self, input_string: str, output_file_name: str, port: str
+    ) -> None:
         """
         initializes the basic parameters, the "medium" volume
         the basic bpm, volumes, initial notes, the first intrument from the
@@ -28,6 +30,7 @@ class Player:
         self.__octave: int = 3
         self.__output_file_name = output_file_name
         self.__input = input_string
+        self.__port = port
         self.__parse_input()
 
     def __parse_input(self) -> None:
@@ -137,7 +140,7 @@ class Player:
         """
         total_time = 0
         for msg in self.__notes:
-            if hasattr(msg, "time"):
+            if not msg.is_meta:
                 total_time += msg.time
         return total_time
 
@@ -153,12 +156,14 @@ class Player:
         save_file.tracks.append(self.__notes)
         save_file.save(filename=self.__output_file_name)
 
-    def play_notes(self, port: str) -> None:
+    def generate_file(self) -> None:
+        midi_file = mido.MidiFile()
+        midi_file.tracks[0] = self.__notes
+        midi_file.save(self.__output_file_name)
+
+    def play_notes(self) -> None:
         file = mido.MidiFile()
         file.tracks[0] = self.__notes
-        with mido.open_output(name=port) as p:
+        with mido.open_output(name=self.__port) as p:
             for msg in file.play():
                 p.send(msg)
-
-
-# %%
