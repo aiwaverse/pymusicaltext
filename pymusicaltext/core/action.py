@@ -72,15 +72,3 @@ class Action(MidiUnit):
     def __change_instrument(self) -> None:
         # a random instrument from 0 to 127, as midi standard
         self.__instrument = choice(range(0, 128))
-
-    def __write_instrument_message(self, message):
-        """
-        writes a MetaMessage on message that changes the instrument
-        """
-        raise NotImplementedError("TODO")
-
-    def __write_bpm_message(self, message):
-        """
-        writes a MetaMessage on message that changes the bpm (tempo)
-        """
-        raise NotImplementedError("TODO")

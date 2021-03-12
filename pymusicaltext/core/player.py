@@ -23,12 +23,12 @@ class Player:
         """
         self.__volume: int = 64
         self.__bpm: int = 120
+        self.__output_file_name = output_file_name
         self.__notes: List[
             Union[mido.MetaMessage, mido.Message]
         ] = self.__initial_midi_file()
         self.__instrument: int = 0
         self.__octave: int = 3
-        self.__output_file_name = output_file_name
         self.__input = input_string
         self.__port = port
         self.__parse_input()
@@ -126,13 +126,6 @@ class Player:
             ),
         ]
 
-    def __change_instrument(self) -> mido.MetaMessage:
-        """
-        this functions generates a meta-message that changes the
-         midi instrument of the track
-        """
-        return mido.MetaMessage("program_change", program=self.__instrument)
-
     def __calculate_end_time(self) -> int:
         """
         uses the time attribute on every note
@@ -140,8 +133,7 @@ class Player:
         """
         total_time = 0
         for msg in self.__notes:
-            if not msg.is_meta:
-                total_time += msg.time
+            total_time += msg.time
         return total_time
 
     def __write_notes_to_file(self) -> None:
