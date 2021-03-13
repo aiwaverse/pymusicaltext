@@ -1,5 +1,7 @@
-from typing import Union, List
-from mido import Message
+from typing import List
+
+import mido
+
 from .midiunit import MidiUnit
 
 
@@ -9,7 +11,7 @@ class Note(MidiUnit):
         self.__octave = octave
         self.__volume = volume
 
-    def generate_message(self) -> List[Message]:
+    def generate_message(self) -> List[mido.Message]:
         """
         this "plays" the note, returning a list of 2 elements
         with the on/off messages
@@ -18,13 +20,13 @@ class Note(MidiUnit):
         # volume needs to be decreased by one since we are using 1-128
         # while midi uses 0-127
         return [
-            Message(
+            mido.Message(
                 "note_on",
                 note=self.__note + self.__octave,
                 velocity=self.__volume - 1,
                 time=60,
             ),
-            Message(
+            mido.Message(
                 "note_off",
                 note=self.__note + self.__octave,
                 velocity=self.__volume - 1,

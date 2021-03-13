@@ -1,6 +1,8 @@
-from typing import Tuple, Union, List, Dict
 from random import choice
-from mido import MetaMessage
+from typing import List, Tuple
+
+import mido
+
 from .midiunit import MidiUnit
 
 
@@ -14,7 +16,7 @@ class Action(MidiUnit):
         self.__bpm = bpm
         self.__instrument = instrument
 
-    def generate_message(self) -> List[MetaMessage]:
+    def generate_message(self) -> List[mido.MetaMessage]:
         # TODO: make a funciton that generates the meta message,
         # return a list for uniformity.
         raise NotImplementedError("TODO")
