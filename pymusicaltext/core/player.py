@@ -29,7 +29,7 @@ class Player:
         ] = self.__initial_midi_file()
         self.__instrument: int = 0
         self.__octave: int = 3
-        self.__input = input_string
+        self.__input_string = input_string
         self.__port = port
         self.__parse_input()
 
@@ -107,7 +107,12 @@ class Player:
                 ) = curr.execute()
             self.__notes += curr.generate_message()
 
-    def load_string(self, string: str) -> None:
+    @property
+    def input_string(self) -> str:
+        return self.__input_string
+
+    @input_string.setter
+    def input_string(self, string: str) -> None:
         """
         loads a new string into the object
         useful for reading from a text box
@@ -136,7 +141,7 @@ class Player:
             total_time += msg.time
         return total_time
 
-    def __write_notes_to_file(self) -> None:
+    def generate_file(self) -> None:
         """
         writes the notes to the file, adds an
         end_of_track meta message to the end too
@@ -147,11 +152,6 @@ class Player:
         )
         save_file.tracks.append(self.__notes)
         save_file.save(filename=self.__output_file_name)
-
-    def generate_file(self) -> None:
-        midi_file = mido.MidiFile()
-        midi_file.tracks[0] = self.__notes
-        midi_file.save(self.__output_file_name)
 
     def play_notes(self) -> None:
         file = mido.MidiFile()
