@@ -4,7 +4,16 @@ from typing import List, Union
 
 import mido
 
+from pymusicaltext.core.constants import (
+    BPM_MIN,
+    BPM_MIN,
+    INSTRUMENT_MIN,
+    OCTAVE_MIN,
+    VOLUME_DEFAULT,
+)
+
 from .action import Action
+from .midiinfo import AdvancedMidiInfo
 from .note import Note
 from .parser import Parser
 
@@ -21,14 +30,13 @@ class Player:
         the basic octave is 3, to have the mid-note,
         as per usual of midi intruments
         """
-        self.__volume: int = 64
-        self.__bpm: int = 120
+        self.__info: AdvancedMidiInfo = AdvancedMidiInfo(
+            OCTAVE_MIN, VOLUME_DEFAULT, INSTRUMENT_MIN, BPM_MIN
+        )
         self.__output_file_name = output_file_name
         self.__notes: List[
             Union[mido.MetaMessage, mido.Message]
         ] = self.__initial_midi_file()
-        self.__instrument: int = 0
-        self.__octave: int = 3
         self.__input_string = input_string
         self.__port = port
         self.__parse_input()
@@ -87,24 +95,12 @@ class Player:
             if tok in note_tokens:
                 # tok is a note
                 if tok in "iou" and previous_tok in note_tokens:
-                    curr = Note(tok, self.__octave, self.__volume)
+                    curr = Note(tok, self.__info)
                 else:
-                    curr = Note(" ", self.__octave, self.__volume)
+                    curr = Note(" ", self.__info)
             else:
                 # tok is an action
-                curr = Action(
-                    tok,
-                    self.__volume,
-                    self.__octave,
-                    self.__bpm,
-                    self.__instrument,
-                )
-                (
-                    self.__volume,
-                    self.__octave,
-                    self.__bpm,
-                    self.__instrument,
-                ) = curr.execute()
+                curr = Action(tok, self.__info)
             self.__notes += curr.generate_message()
 
     @property
