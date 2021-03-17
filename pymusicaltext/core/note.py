@@ -8,7 +8,8 @@ from .midiinfo import BasicMidiInfo
 
 class Note(MidiUnit):
     def __init__(self, note: str, player_info: BasicMidiInfo):
-        self.__note = self.__decode_note(note)
+        # self.__note = self.__decode_note(note)
+        self.__note = 0
         self.__info = player_info
 
     def generate_message(self) -> List[mido.Message]:
@@ -31,6 +32,12 @@ class Note(MidiUnit):
                 time=0,
             ),
         ]
+
+    def test(self) -> None:
+        print("Entering Note Test!")
+        print("Incrementing volume by 10 and Octave by 2.")
+        self.__info.volume += 10
+        self.__info.octave += 2
 
     def __decode_note(self, note: str) -> int:
         """
