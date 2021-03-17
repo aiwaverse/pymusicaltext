@@ -5,8 +5,7 @@ from typing import List, Union
 import mido
 
 from pymusicaltext.core.constants import (
-    BPM_MIN,
-    BPM_MIN,
+    BPM_DEFAULT,
     INSTRUMENT_MIN,
     OCTAVE_MIN,
     VOLUME_DEFAULT,
@@ -20,7 +19,10 @@ from .parser import Parser
 
 class Player:
     def __init__(
-        self, input_string: str, output_file_name: str, port: str
+        self,
+        input_string: str = "",
+        output_file_name: str = "",
+        port: str = "",
     ) -> None:
         """
         initializes the basic parameters, the "medium" volume
@@ -31,7 +33,7 @@ class Player:
         as per usual of midi intruments
         """
         self.__info: AdvancedMidiInfo = AdvancedMidiInfo(
-            OCTAVE_MIN, VOLUME_DEFAULT, INSTRUMENT_MIN, BPM_MIN
+            OCTAVE_MIN, VOLUME_DEFAULT, INSTRUMENT_MIN, BPM_DEFAULT
         )
         self.__output_file_name = output_file_name
         self.__notes: List[
@@ -40,6 +42,17 @@ class Player:
         self.__input_string = input_string
         self.__port = port
         self.__parse_input()
+
+    def test(self) -> None:
+        print(f"MidiInfo before anything: \n{self.__info}")
+        print("Creating note...")
+        n = Note("", self.__info)
+        n.test()
+        print(f"\n\nMidiInfo after Note.test(): \n{self.__info}")
+        print("Creating Action...")
+        a = Action("", self.__info)
+        a.test()
+        print(f"\n\nMidiInfo after Action.test(): \n{self.__info}")
 
     def __parse_input(self) -> None:
         """
@@ -67,7 +80,7 @@ class Player:
             ".",
             "\n",
         ]
-        p = Parser(self.__input, tokens, return_not_matched=False)
+        p = Parser(self.__input_string, tokens, return_not_matched=False)
         self.__decoded_input = p.parse()
 
     def __generate_notes(self) -> None:
