@@ -1,6 +1,12 @@
-from pymusicaltext.core.constants import (BPM_MAX, BPM_MIN, INSTRUMENT_MAX,
-                                          INSTRUMENT_MIN, OCTAVE_MAX,
-                                          OCTAVE_MIN, VOLUME_MAX)
+from pymusicaltext.core.constants import (
+    BPM_MAX,
+    BPM_MIN,
+    INSTRUMENT_MAX,
+    INSTRUMENT_MIN,
+    OCTAVE_MAX,
+    OCTAVE_MIN,
+    VOLUME_MAX, VOLUME_MIN,
+)
 
 
 class BasicMidiInfo:
@@ -36,9 +42,14 @@ class BasicMidiInfo:
         sets if it is, otherwise uses the limits
         """
         if v > VOLUME_MAX:
-            self._volume = v
-        else:
             self._volume = VOLUME_MAX
+        elif v < VOLUME_MIN:
+            self._volume = VOLUME_MIN
+        else:
+            self._volume = v
+
+    def __str__(self) -> str:
+        return f"Octave: {self.octave}\nVolume: {self.volume}\n"
 
 
 class AdvancedMidiInfo(BasicMidiInfo):
@@ -80,3 +91,9 @@ class AdvancedMidiInfo(BasicMidiInfo):
             self._bpm = BPM_MIN
         else:
             self._bpm = bp
+
+    def __str__(self) -> str:
+        return (
+            super().__str__()
+            + f"Instrument: {self.instrument}\nBPM: {self.bpm}"
+        )
