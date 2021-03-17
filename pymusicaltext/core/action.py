@@ -64,3 +64,14 @@ class Action(MidiUnit):
     def __change_instrument(self) -> None:
         # a random instrument from 0 to 127, as midi standard
         self.__info.instrument = choice(range(0, 128))
+
+    def test(self) -> None:
+        print("Entering Action Test function!")
+        print(
+            "Decreasing volume by 20, Octave by 2, Increasing bpm by 150, and \
+            setting instrument to 78."
+        )
+        self.__info.volume -= 20
+        self.__info.octave -= 2
+        self.__info.bpm += 150
+        self.__info.instrument = 78
