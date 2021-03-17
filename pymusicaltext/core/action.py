@@ -3,34 +3,28 @@ from typing import List, Tuple
 
 import mido
 
+from .midiinfo import AdvancedMidiInfo
 from .midiunit import MidiUnit
 
 
 class Action(MidiUnit):
-    def __init__(
-        self, act: str, volume: int, octave: int, bpm: int, instrument: int
-    ) -> None:
+    def __init__(self, act: str, player_info: AdvancedMidiInfo) -> None:
         self.__action = act
-        self.__volume = volume
-        self.__octave = octave
-        self.__bpm = bpm
-        self.__instrument = instrument
+        self.__info = player_info
 
     def generate_message(self) -> List[mido.MetaMessage]:
         # TODO: make a funciton that generates the meta message,
         # return a list for uniformity.
         raise NotImplementedError("TODO")
 
-    def execute(self) -> Tuple[int, int, int, int]:
+    def __execute(self) -> None:
         """
         executes the action that the instance represents
-        return a tuple with (volume, octave, bpm, instrument)
-        with possible modifications
-        the meta_message argument should be an empty list (but named)
+        alters the info (because of how python carries objects)
+        this should be called in generate_message
         """
         to_run = self.__decode_action(self.__action)
         to_run()
-        return (self.__volume, self.__octave, self.__bpm, self.__instrument)
 
     # TODO: come up with a way to check if meta_message needs to be written
     # and change it accordingly
@@ -39,38 +33,34 @@ class Action(MidiUnit):
         raise NotImplementedError("TODO")
 
     def __increase_octave(self) -> None:
-        self.__octave += 1
-        if self.__octave > 7:
-            self.__octave = 7
+        self.__info.octave += 1
 
     def __decrease_octave(self) -> None:
-        self.__octave -= 1
-        if self.__octave < 0:
-            self.__octave = 0
+        self.__info.octave -= 1
 
     def __increase_bpm(self) -> None:
-        self.__bpm += 50
+        self.__info.bpm += 50
 
     def __decrease_bpm(self) -> None:
-        self.__bpm -= 50
-        if self.__bpm <= 4:
+        self.__info.bpm -= 50
+        if self.__info.bpm <= 4:
             # this is the lowest acceptable interger to have as bpm,
             # midi limitations with set_tempo
-            self.__bpm = 4
+            self.__info.bpm = 4
 
     def __increase_volume(self) -> None:
         # the volume will NOT be duplicated for now, this would
         # cause the volume to be only at two states
         # this increases it by 10%
-        self.__volume = round(self.__volume * 1.1)
-        if self.__volume > 128:
-            self.__volume = 128
+        self.__info.volume = round(self.__info.volume * 1.1)
+        if self.__info.volume > 128:
+            self.__info.volume = 128
 
     def __decrease_volume(self) -> None:
         # called decrease to maintain an uniformity,
         # but it resets the volume to 64
-        self.__volume = 64
+        self.__info.volume = 64
 
     def __change_instrument(self) -> None:
         # a random instrument from 0 to 127, as midi standard
-        self.__instrument = choice(range(0, 128))
+        self.__info.instrument = choice(range(0, 128))
