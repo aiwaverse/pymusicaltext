@@ -43,18 +43,12 @@ class Action(MidiUnit):
 
     def __decrease_bpm(self) -> None:
         self.__info.bpm -= 50
-        if self.__info.bpm <= 4:
-            # this is the lowest acceptable interger to have as bpm,
-            # midi limitations with set_tempo
-            self.__info.bpm = 4
 
     def __increase_volume(self) -> None:
         # the volume will NOT be duplicated for now, this would
         # cause the volume to be only at two states
         # this increases it by 10%
         self.__info.volume = round(self.__info.volume * 1.1)
-        if self.__info.volume > 128:
-            self.__info.volume = 128
 
     def __decrease_volume(self) -> None:
         # called decrease to maintain an uniformity,
