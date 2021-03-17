@@ -1,21 +1,27 @@
-from typing import Tuple, Union, List, Dict
 from random import choice
-from mido import MetaMessage
+from typing import List, Tuple
+
+import mido
+
+from .midiunit import MidiUnit
 
 
-class Action:
+class Action(MidiUnit):
     def __init__(
         self, act: str, volume: int, octave: int, bpm: int, instrument: int
     ) -> None:
-        self.__action = self.__decode_action(act)
+        self.__action = act
         self.__volume = volume
         self.__octave = octave
         self.__bpm = bpm
         self.__instrument = instrument
 
-    def execute(
-        self, meta_message: List[MetaMessage]
-    ) -> Tuple[int, int, int, int]:
+    def generate_message(self) -> List[mido.MetaMessage]:
+        # TODO: make a funciton that generates the meta message,
+        # return a list for uniformity.
+        raise NotImplementedError("TODO")
+
+    def execute(self) -> Tuple[int, int, int, int]:
         """
         executes the action that the instance represents
         return a tuple with (volume, octave, bpm, instrument)
@@ -68,15 +74,3 @@ class Action:
     def __change_instrument(self) -> None:
         # a random instrument from 0 to 127, as midi standard
         self.__instrument = choice(range(0, 128))
-
-    def __write_instrument_message(self, message):
-        """
-        writes a MetaMessage on message that changes the instrument
-        """
-        raise NotImplementedError("TODO")
-
-    def __write_bpm_message(self, message):
-        """
-        writes a MetaMessage on message that changes the bpm (tempo)
-        """
-        raise NotImplementedError("TODO")
