@@ -1,0 +1,13 @@
+MIDI_MINIMUM: int = 0
+MIDI_MAXIMUM: int = 127
+BPM_DEFAULT: int = 120
+BPM_MIN: int = 4
+BPM_MAX: int = 60000000
+BPM_STEP: int = 50
+OCTAVE_MIN: int = 0
+OCTAVE_MAX: int = 7
+VOLUME_MIN: int = 0
+VOLUME_MAX: int = 127
+VOLUME_DEFAULT: int = 13  # roughly 10% of the maximum
+INSTRUMENT_MIN: int = 0
+INSTRUMENT_MAX: int = 127

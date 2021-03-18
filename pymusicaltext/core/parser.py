@@ -1,10 +1,10 @@
-from typing import List
 import re
+from typing import List
 
 
 class Parser:
     def __init__(
-        self, string_to_parse: str, tokens: List[str], return_not_matched=True
+        self, string_to_parse: str, tokens: List[str], return_not_matched=False
     ) -> None:
         """
         initializes the Parser with it's string, and the tokens
