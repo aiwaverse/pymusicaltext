@@ -1,7 +1,8 @@
-#%%
+# %%
 from pymusicaltext import Player
 import PySimpleGUI as sg
-#%%
+# %%
+
 
 def make_gui(title: str) -> sg.Window:
     layout = [
