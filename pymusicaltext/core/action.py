@@ -1,3 +1,9 @@
+from pymusicaltext.core.constants import (
+    BPM_STEP,
+    MIDI_MAXIMUM,
+    MIDI_MINIMUM,
+    VOLUME_DEFAULT,
+)
 from random import choice
 from typing import List, Tuple
 
@@ -39,25 +45,25 @@ class Action(MidiUnit):
         self.__info.octave -= 1
 
     def __increase_bpm(self) -> None:
-        self.__info.bpm += 50
+        self.__info.bpm += BPM_STEP
 
     def __decrease_bpm(self) -> None:
-        self.__info.bpm -= 50
+        self.__info.bpm -= BPM_STEP
 
     def __increase_volume(self) -> None:
         # the volume will NOT be duplicated for now, this would
         # cause the volume to be only at two states
         # this increases it by 10%
-        self.__info.volume = round(self.__info.volume * 1.1)
+        self.__info.volume *= 2
 
     def __decrease_volume(self) -> None:
         # called decrease to maintain an uniformity,
         # but it resets the volume to 64
-        self.__info.volume = 64
+        self.__info.volume = VOLUME_DEFAULT
 
     def __change_instrument(self) -> None:
         # a random instrument from 0 to 127, as midi standard
-        self.__info.instrument = choice(range(0, 128))
+        self.__info.instrument = choice(range(MIDI_MINIMUM, MIDI_MAXIMUM + 1))
 
     def test(self) -> None:
         print("Entering Action Test function!")
