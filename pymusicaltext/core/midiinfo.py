@@ -5,12 +5,13 @@ from pymusicaltext.core.constants import (
     INSTRUMENT_MIN,
     OCTAVE_MAX,
     OCTAVE_MIN,
-    VOLUME_MAX, VOLUME_MIN,
+    VOLUME_MAX,
+    VOLUME_MIN,
 )
 
 
 class BasicMidiInfo:
-    def __init__(self, octave=0, volume=0) -> None:
+    def __init__(self, octave: int = 0, volume: int = 0) -> None:
         self._octave: int = octave
         self._volume: int = volume
 
@@ -53,7 +54,13 @@ class BasicMidiInfo:
 
 
 class AdvancedMidiInfo(BasicMidiInfo):
-    def __init__(self, octave, volume, instrument, bpm) -> None:
+    def __init__(
+        self,
+        octave: int = 0,
+        volume: int = 0,
+        instrument: int = 0,
+        bpm: int = 0,
+    ) -> None:
         super().__init__(octave=octave, volume=volume)
         self._instrument: int = instrument
         self._bpm: int = bpm
