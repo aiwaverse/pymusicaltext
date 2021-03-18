@@ -11,9 +11,8 @@ from pymusicaltext.core.constants import (
     VOLUME_DEFAULT,
 )
 
-from .action import Action
+from .unitgenerator import MidiUnitGenerator
 from .midiinfo import AdvancedMidiInfo
-from .note import Note
 from .parser import Parser
 
 
@@ -42,17 +41,6 @@ class Player:
         self.__input_string = input_string
         self.__port = port
         self.__parse_input()
-
-    def test(self) -> None:
-        print(f"MidiInfo before anything: \n{self.__info}")
-        print("Creating note...")
-        n = Note("", self.__info)
-        n.test()
-        print(f"\n\nMidiInfo after Note.test(): \n{self.__info}")
-        print("Creating Action...")
-        a = Action("", self.__info)
-        a.test()
-        print(f"\n\nMidiInfo after Action.test(): \n{self.__info}")
 
     def __parse_input(self) -> None:
         """
@@ -88,33 +76,10 @@ class Player:
         this will use Note/Action to generate the notes
         that will go on the __notes list
         """
-        note_tokens = [
-            "a",
-            "i",
-            "o",
-            "u",
-            "b",
-            "c",
-            "d",
-            "e",
-            "f",
-            "g",
-            " ",
-            "?",
-            ".",
-        ]
-        previous_tok = ""
         for tok in self.__decoded_input:
-            if tok in note_tokens:
-                # tok is a note
-                if tok in "iou" and previous_tok in note_tokens:
-                    curr = Note(tok, self.__info)
-                else:
-                    curr = Note(" ", self.__info)
-            else:
-                # tok is an action
-                curr = Action(tok, self.__info)
-            self.__notes += curr.generate_message()
+            partial_element = MidiUnitGenerator(tok).generate()
+            element = partial_element(self.__info)
+            self.__notes += element.generate_message()
 
     @property
     def input_string(self) -> str:
