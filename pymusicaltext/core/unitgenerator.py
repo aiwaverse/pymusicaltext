@@ -5,6 +5,9 @@ from typing import Union
 
 
 class MidiUnitGenerator:
+    """
+    A class to control the generation of MidiUnits
+    """
     __last_token: str = ""
 
     def __init__(self, tok: str) -> None:
@@ -13,6 +16,12 @@ class MidiUnitGenerator:
     def generate(
         self,
     ) -> Union[functools.partial[Action], functools.partial[Note]]:
+        """
+        this function ideally should return a
+        partially applied MidiUnit constructor
+        however, partial is invariant, so we had to
+        resort to using Union again
+        """
         note_tokens = [
             "a",
             "b",
@@ -28,13 +37,13 @@ class MidiUnitGenerator:
         if self.__value in note_tokens:
             to_return = functools.partial(Note, self.__value)
         elif self.__value in "iou":
-            if self.__last_token in note_tokens:
-                self.__value = self.__last_token
+            if MidiUnitGenerator.__last_token in note_tokens:
+                self.__value = MidiUnitGenerator.__last_token
                 to_return = functools.partial(Note, self.__value)
             else:
                 self.__value = " "
                 to_return = functools.partial(Note, self.__value)
         else:
             to_return = functools.partial(Action, self.__value)
-        self.__last_token = self.__value
+        MidiUnitGenerator.__last_token = self.__value
         return to_return
