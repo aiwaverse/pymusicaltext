@@ -11,7 +11,7 @@ class Generator:
     __last_token: str = ""
 
     def __init__(self, tok: str) -> None:
-        self.__value = tok
+        self.__value = tok.upper()
 
     def generate(
         self,
@@ -23,13 +23,13 @@ class Generator:
         resort to using Union again
         """
         note_tokens = [
-            "a",
-            "b",
-            "c",
-            "d",
-            "e",
-            "f",
-            "g",
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
             " ",
             "?",
             ".",
