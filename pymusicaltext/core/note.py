@@ -1,15 +1,26 @@
-from typing import List
+from typing import List, Dict
 
 import mido
 
 from .midiunit import MidiUnit
 from .midiinfo import BasicMidiInfo
 
+from .constants import (
+    NOTE_A,
+    NOTE_B,
+    NOTE_C,
+    NOTE_D,
+    NOTE_E,
+    NOTE_F,
+    NOTE_G,
+    NOTE_DURATION,
+)
+
 
 class Note(MidiUnit):
     def __init__(self, note: str, player_info: BasicMidiInfo):
-        # self.__note = self.__decode_note(note)
-        self.__note = 0
+        self.__note = self.__decode_note(note)
+        # self.__note = 0
         self.__info = player_info
 
     def generate_message(self) -> List[mido.Message]:
@@ -23,7 +34,7 @@ class Note(MidiUnit):
                 "note_on",
                 note=self.__note + self.__info.octave,
                 velocity=self.__info.volume,
-                time=60,
+                time=NOTE_DURATION,
             ),
             mido.Message(
                 "note_off",
@@ -43,4 +54,13 @@ class Note(MidiUnit):
         """
         this function will decode the note, a string, to the midi format
         """
-        raise NotImplementedError("TODO")
+        note_dict: Dict[str, int] = {
+            "C": NOTE_C,
+            "D": NOTE_D,
+            "E": NOTE_E,
+            "F": NOTE_F,
+            "G": NOTE_G,
+            "A": NOTE_A,
+            "B": NOTE_B,
+        }
+        return note_dict[note.upper()]
