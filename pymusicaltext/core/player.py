@@ -11,7 +11,7 @@ from pymusicaltext.core.constants import (
     VOLUME_DEFAULT,
 )
 
-from .unitgenerator import MidiUnitGenerator
+from .unitgenerator import Generator
 from .midiinfo import AdvancedMidiInfo
 from .parser import Parser
 
@@ -77,7 +77,7 @@ class Player:
         that will go on the __notes list
         """
         for tok in self.__decoded_input:
-            partial_element = MidiUnitGenerator(tok).generate()
+            partial_element = Generator(tok).generate()
             element = partial_element(self.__info)
             self.__notes += element.generate_message()
 

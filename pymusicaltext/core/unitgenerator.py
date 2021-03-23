@@ -4,7 +4,7 @@ import functools
 from typing import Union
 
 
-class MidiUnitGenerator:
+class Generator:
     """
     A class to control the generation of MidiUnits
     """
@@ -37,13 +37,13 @@ class MidiUnitGenerator:
         if self.__value in note_tokens:
             to_return = functools.partial(Note, self.__value)
         elif self.__value in "iou":
-            if MidiUnitGenerator.__last_token in note_tokens:
-                self.__value = MidiUnitGenerator.__last_token
+            if Generator.__last_token in note_tokens:
+                self.__value = Generator.__last_token
                 to_return = functools.partial(Note, self.__value)
             else:
                 self.__value = " "
                 to_return = functools.partial(Note, self.__value)
         else:
             to_return = functools.partial(Action, self.__value)
-        MidiUnitGenerator.__last_token = self.__value
+        Generator.__last_token = self.__value
         return to_return
