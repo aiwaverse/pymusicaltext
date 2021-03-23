@@ -1,13 +1,15 @@
 from .note import Note
 from .action import Action
 import functools
-from typing import Union
+from typing import Callable, Union
+from .midiinfo import BasicMidiInfo, AdvancedMidiInfo
 
 
 class Generator:
     """
     A class to control the generation of MidiUnits
     """
+
     __last_token: str = ""
 
     def __init__(self, tok: str) -> None:
@@ -15,7 +17,9 @@ class Generator:
 
     def generate(
         self,
-    ) -> Union[functools.partial[Action], functools.partial[Note]]:
+    ) -> Union[
+        Callable[[AdvancedMidiInfo], Action], Callable[[BasicMidiInfo], Note]
+    ]:
         """
         this function ideally should return a
         partially applied MidiUnit constructor
