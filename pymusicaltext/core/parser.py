@@ -4,7 +4,7 @@ from typing import List
 
 class Parser:
     def __init__(
-        self, string_to_parse: str, tokens: List[str], return_not_matched=False
+        self, string_to_parse: str, tokens: List[str]
     ) -> None:
         """
         initializes the Parser with it's string, and the tokens
@@ -15,7 +15,6 @@ class Parser:
         """
         self.__string = string_to_parse.lower()
         self.__tokens = tokens
-        self.__return_not_matched = return_not_matched
 
     def parse(self) -> List[str]:
         """
@@ -29,11 +28,7 @@ class Parser:
             f"{re.escape(delim)}" for delim in self.__tokens
         )
         tokens_found = re.findall(regex_pattern, self.__string)
-        if self.__return_not_matched:
-            rest_of_string = re.sub(regex_pattern, "", self.__string)
-            return tokens_found + list(rest_of_string)
-        else:
-            return tokens_found
+        return tokens_found
 
 
 # %%
