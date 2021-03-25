@@ -5,7 +5,7 @@ from pymusicaltext.core.constants import (
     VOLUME_DEFAULT,
 )
 from random import choice
-from typing import List, Tuple
+from typing import Callable, Dict, List, Union
 
 import mido
 
@@ -18,10 +18,29 @@ class Action(MidiUnit):
         self.__action = act
         self.__info = player_info
 
-    def generate_message(self) -> List[mido.MetaMessage]:
-        # TODO: make a funciton that generates the meta message,
+    def generate_message(
+        self,
+    ) -> Union[List[mido.Message], List[mido.MetaMessage]]:
+        # funciton that generates the message,
         # return a list for uniformity.
-        raise NotImplementedError("TODO")
+        self.__execute()
+        return_messages: Dict[str, List[mido.MetaMessage]] = {
+            "bpm+": [
+                mido.MetaMessage(
+                    "set_tempo", tempo=mido.tempo2bpm(self.__info.bpm)
+                )
+            ],
+            "bpm-": [
+                mido.MetaMessage(
+                    "set_tempo", tempo=mido.tempo2bpm(self.__info.bpm)
+                )
+            ],
+            # for some reason, program change is not a MetaMessage, blame mido
+            "\n": [
+                mido.Message("program_change", program=self.__info.instrument)
+            ],
+        }
+        return return_messages.get(self.__action, [])
 
     def __execute(self) -> None:
         """
@@ -29,14 +48,23 @@ class Action(MidiUnit):
         alters the info (because of how python carries objects)
         this should be called in generate_message
         """
-        to_run = self.__decode_action(self.__action)
+        to_run = self.__decode_action()
         to_run()
 
-    # TODO: come up with a way to check if meta_message needs to be written
-    # and change it accordingly
-
-    def __decode_action(self, act):
-        raise NotImplementedError("TODO")
+    def __decode_action(self) -> Callable[[], None]:
+        """
+        returns the function taht the action needs to execute
+        """
+        actions: Dict[str, Callable[[], None]] = {
+            "bpm+": self.__increase_bpm,
+            "bpm-": self.__decrease_bpm,
+            "\n": self.__change_instrument,
+            "T+": self.__increase_octave,
+            "T-": self.__decrease_octave,
+            "+": self.__increase_volume,
+            "-": self.__decrease_volume,
+        }
+        return actions[self.__action]
 
     def __increase_octave(self) -> None:
         self.__info.octave += 1
@@ -51,14 +79,12 @@ class Action(MidiUnit):
         self.__info.bpm -= BPM_STEP
 
     def __increase_volume(self) -> None:
-        # the volume will NOT be duplicated for now, this would
-        # cause the volume to be only at two states
-        # this increases it by 10%
+        # duplicated the value of volume
         self.__info.volume *= 2
 
     def __decrease_volume(self) -> None:
         # called decrease to maintain an uniformity,
-        # but it resets the volume to 64
+        # but it resets the volume to the default
         self.__info.volume = VOLUME_DEFAULT
 
     def __change_instrument(self) -> None:
