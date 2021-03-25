@@ -20,9 +20,7 @@ class Parser:
         """
         splits the string with the passed tokens and
         returns a list of strings
-        non matched characters are returned as
-        single characters at the end of the list
-        if the return_not_matched flag is True (default)
+        non matched characters are ignored
         """
         regex_pattern = "|".join(
             f"{re.escape(delim)}" for delim in self.__tokens
