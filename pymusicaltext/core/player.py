@@ -68,7 +68,7 @@ class Player:
             ".",
             "\n",
         ]
-        p = Parser(self.__input_string, tokens, return_not_matched=False)
+        p = Parser(self.__input_string, tokens)
         self.__decoded_input = p.parse()
 
     def __generate_notes(self) -> None:
