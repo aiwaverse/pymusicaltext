@@ -13,7 +13,7 @@ class Parser:
         so, "bpm+" MUST come before "+",
         otherwise incorrect matches will happen
         """
-        self.__string = string_to_parse.lower()
+        self.__string = string_to_parse
         self.__tokens = tokens
 
     def parse(self) -> List[str]:
