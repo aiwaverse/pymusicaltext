@@ -1,9 +1,9 @@
 import abc
 from typing import List, Union
-from mido import Message, MetaMessage
+import mido
 
 
 class MidiUnit(abc.ABC):
     @abc.abstractmethod
-    def generate_message(self) -> Union[List[Message], List[MetaMessage]]:
+    def generate_message(self) -> Union[List[mido.Message], List[mido.MetaMessage]]:
         pass
