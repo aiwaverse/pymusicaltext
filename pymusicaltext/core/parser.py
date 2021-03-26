@@ -8,7 +8,7 @@ class Parser:
     ) -> None:
         """
         initializes the Parser with it's string, and the tokens
-        it's of utermost importance that the tokens go from
+        it's of uttermost importance that the tokens go from
         less general, to more general
         so, "bpm+" MUST come before "+",
         otherwise incorrect matches will happen
