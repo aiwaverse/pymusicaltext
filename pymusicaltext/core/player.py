@@ -25,11 +25,11 @@ class Player:
     ) -> None:
         """
         initializes the basic parameters, the "medium" volume
-        the basic bpm, volumes, initial notes, the first intrument from the
+        the basic bpm, volumes, initial notes, the first instrument from the
         midi table, middle octave
         plus with the file_name passed to the construction
         the basic octave is 3, to have the mid-note,
-        as per usual of midi intruments
+        as per usual of midi instruments
         """
         self.__info: AdvancedMidiInfo = AdvancedMidiInfo(
             OCTAVE_MIN, VOLUME_DEFAULT, INSTRUMENT_MIN, BPM_DEFAULT
@@ -91,7 +91,7 @@ class Player:
         loads a new string into the object
         useful for reading from a text box
         """
-        self.__input = string
+        self.__input_string = string
         self.__parse_input()
 
     def __initial_midi_file(self) -> List[mido.MetaMessage]:
