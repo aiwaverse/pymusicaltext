@@ -1,4 +1,3 @@
-from os import environ
 from os.path import splitext
 from typing import List, Union
 

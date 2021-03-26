@@ -21,7 +21,7 @@ class Action(MidiUnit):
     def generate_message(
         self,
     ) -> Union[List[mido.Message], List[mido.MetaMessage]]:
-        # funciton that generates the message,
+        # function that generates the message,
         # return a list for uniformity.
         self.__execute()
         return_messages: Dict[str, List[mido.MetaMessage]] = {
@@ -53,7 +53,7 @@ class Action(MidiUnit):
 
     def __decode_action(self) -> Callable[[], None]:
         """
-        returns the function taht the action needs to execute
+        returns the function that the action needs to execute
         """
         actions: Dict[str, Callable[[], None]] = {
             "bpm+": self.__increase_bpm,
