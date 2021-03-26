@@ -50,7 +50,8 @@ class Note(MidiUnit):
         self.__info.volume += 10
         self.__info.octave += 2
 
-    def __decode_note(self, note: str) -> int:
+    @staticmethod
+    def __decode_note(note: str) -> int:
         """
         this function will decode the note, a string, to the midi format
         """
