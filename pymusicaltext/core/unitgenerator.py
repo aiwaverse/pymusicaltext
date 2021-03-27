@@ -16,9 +16,7 @@ class Generator:
     def __init__(self, tok: str) -> None:
         self.__value = tok.upper()
 
-    def generate(
-        self,
-    ) -> Callable[[BasicMidiInfo], MidiUnit]:
+    def generate(self) -> Callable[[BasicMidiInfo], MidiUnit]:
         """
         this function ideally should return a
         partially applied MidiUnit constructor
