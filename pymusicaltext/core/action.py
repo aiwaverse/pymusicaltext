@@ -24,7 +24,7 @@ class Action(MidiUnit):
         # function that generates the message,
         # return a list for uniformity.
         self.__execute()
-        return_messages: Dict[str, List[mido.MetaMessage]] = {
+        return_messages = {
             "bpm+": [
                 mido.MetaMessage(
                     "set_tempo", tempo=mido.tempo2bpm(self.__info.bpm)
