@@ -3,6 +3,7 @@ from .action import Action
 import functools
 from typing import Callable, Union
 from .midiinfo import BasicMidiInfo, AdvancedMidiInfo
+from .midiunit import MidiUnit
 
 
 class Generator:
@@ -17,9 +18,7 @@ class Generator:
 
     def generate(
         self,
-    ) -> Union[
-        Callable[[AdvancedMidiInfo], Action], Callable[[BasicMidiInfo], Note]
-    ]:
+    ) -> Callable[[BasicMidiInfo], MidiUnit]:
         """
         this function ideally should return a
         partially applied MidiUnit constructor
