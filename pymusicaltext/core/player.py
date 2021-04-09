@@ -36,7 +36,7 @@ class Player:
         self.__output_file_name = output_file_name
         self.__notes: List[
             Union[mido.MetaMessage, mido.Message]
-        ] = self.__initial_midi_file()
+        ] = self.__initial_midi_file
         self.__input_string = input_string
         self.__port = port
         self.__parse_input()
@@ -72,7 +72,7 @@ class Player:
 
     def __generate_notes(self) -> None:
         """
-        this will use Note/Action to generate the notes
+        this will use Generator to generate the notes
         that will go on the __notes list
         """
         for tok in self.__decoded_input:
@@ -93,6 +93,7 @@ class Player:
         self.__input_string = string
         self.__parse_input()
 
+    @property
     def __initial_midi_file(self) -> List[mido.MetaMessage]:
         """
         a function that generates the basic meta_messages for the track
