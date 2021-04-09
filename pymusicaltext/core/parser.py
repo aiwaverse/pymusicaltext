@@ -4,6 +4,13 @@ from typing import List
 
 
 class Parser:
+    """
+    A parser made to break a text into tokens
+    It's of uttermost importance that the tokens go from
+    less general, to more general
+    so, "bpm+" MUST come before "+",
+    otherwise incorrect matches will happen
+    """
     def __init__(
         self,
         string_to_parse: str,
@@ -11,11 +18,8 @@ class Parser:
         return_not_matched: bool = False,
     ) -> None:
         """
-        initializes the Parser with it's string, and the tokens
-        it's of uttermost importance that the tokens go from
-        less general, to more general
-        so, "bpm+" MUST come before "+",
-        otherwise incorrect matches will happen
+        initializes the Parser with it's string, the tokens
+        and the flag to return non-matched characters
         """
         self.__string = string_to_parse
         self.__tokens = tokens
