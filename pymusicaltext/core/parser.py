@@ -1,10 +1,14 @@
+# %%
 import re
 from typing import List
 
 
 class Parser:
     def __init__(
-        self, string_to_parse: str, tokens: List[str]
+        self,
+        string_to_parse: str,
+        tokens: List[str],
+        return_not_matched: bool = False,
     ) -> None:
         """
         initializes the Parser with it's string, and the tokens
@@ -15,6 +19,7 @@ class Parser:
         """
         self.__string = string_to_parse
         self.__tokens = tokens
+        self.__return_not_matched = return_not_matched
 
     def parse(self) -> List[str]:
         """
@@ -25,6 +30,8 @@ class Parser:
         regex_pattern = "|".join(
             f"{re.escape(delim)}" for delim in self.__tokens
         )
+        if self.__return_not_matched:
+            regex_pattern += "|."
         tokens_found = re.findall(regex_pattern, self.__string)
         return tokens_found
 
