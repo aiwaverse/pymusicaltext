@@ -31,20 +31,35 @@ class Generator:
             "E",
             "F",
             "G",
+        ]
+        action_tokens = [
             " ",
+            "!",
+            "O",
+            "o",
+            "I",
+            "i",
+            "U",
+            "u",
+            "\n",
             "?",
             ".",
+            ";",
+            ",",
         ]
         if self.__value in note_tokens:
             to_return = functools.partial(Note, self.__value)
-        elif self.__value in "iou":
-            if Generator.__last_token in note_tokens:
-                self.__value = Generator.__last_token
-                to_return = functools.partial(Note, self.__value)
-            else:
-                self.__value = " "
-                to_return = functools.partial(Note, self.__value)
-        else:
+        elif self.__value.isdecimal() or self.__value in action_tokens:
             to_return = functools.partial(Action, self.__value)
+        else:
+            # TODO: If the token is a token that
+            # causes a note if the last token was a note
+            # determine if this also counts as a note
+            # i.e. if Aaa will play three A notes.
+            if self.__last_token in note_tokens:
+                self.__value = self.__last_token
+            else:
+                self.__value = ""
+            to_return = functools.partial(Note, self.__value)
         Generator.__last_token = self.__value
         return to_return
