@@ -5,6 +5,7 @@ from pymusicaltext.core.constants import (
     INSTRUMENT_MIN,
     OCTAVE_MAX,
     OCTAVE_MIN,
+    VOLUME_DEFAULT,
     VOLUME_MAX,
     VOLUME_MIN,
 )
@@ -25,8 +26,10 @@ class BasicMidiInfo:
         Checks if o is in correct range for octave
         sets if it is, otherwise uses the limits
         """
+        # changed so it returns to the default octave
         if o > OCTAVE_MAX:
-            self._octave = OCTAVE_MAX
+            # the minimum octave is the default octave
+            self._octave = OCTAVE_MIN
         elif o < OCTAVE_MIN:
             self._octave = OCTAVE_MIN
         else:
@@ -42,8 +45,9 @@ class BasicMidiInfo:
         Checks if v is in correct range for volume
         sets if it is, otherwise uses the limits
         """
+        # changed so it returns to the default volume
         if v > VOLUME_MAX:
-            self._volume = VOLUME_MAX
+            self._volume = VOLUME_DEFAULT
         elif v < VOLUME_MIN:
             self._volume = VOLUME_MIN
         else:
