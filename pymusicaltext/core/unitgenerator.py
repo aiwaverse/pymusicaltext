@@ -14,7 +14,7 @@ class Generator:
     __last_token: str = ""
 
     def __init__(self, tok: str) -> None:
-        self.__value = tok.upper()
+        self.__value = tok
 
     def generate(self) -> Callable[[BasicMidiInfo], MidiUnit]:
         """
@@ -52,11 +52,18 @@ class Generator:
         elif self.__value.isdecimal() or self.__value in action_tokens:
             to_return = functools.partial(Action, self.__value)
         else:
-            # TODO: If the token is a token that
-            # causes a note if the last token was a note
-            # determine if this also counts as a note
-            # i.e. if Aaa will play three A notes.
-            if self.__last_token in note_tokens:
+            # If the token is neither a note or an action
+            # We start to tackle the repetition cases
+            if self.__value == self.__last_token.lower():
+                # Very directly, if the value is the same as the last note
+                # but lowercase
+                self.__value = self.__value.upper()
+            elif (
+                self.__value not in "abcdefg"
+                and self.__last_token in note_tokens
+            ):
+                # Now we tackle if the letter is another consonant
+                # BUT it cannot be a "lower case note"
                 self.__value = self.__last_token
             else:
                 self.__value = ""
