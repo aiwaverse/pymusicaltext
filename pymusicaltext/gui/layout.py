@@ -19,8 +19,8 @@ def image_btn(key: str, file: str) -> Button:
                      key=key, image_filename=file, image_size=(25, 25), image_subsample=4)
 
 
-def text(text: str, font_weight="bold") -> Text:
-    return sg.Text(text, text_color="#fff", font=("Roboto", 11, font_weight))
+def text(label: str, font_weight="bold") -> Text:
+    return sg.Text(label, text_color="#fff", font=("Roboto", 11, font_weight))
 
 
 class Layout:
