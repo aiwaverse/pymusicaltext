@@ -63,7 +63,7 @@ class Generator:
                 and self.__last_token in note_tokens
             ):
                 # Now we tackle if the letter is another consonant
-                # BUT it cannot be a "lower case note"
+                # BUT it's not a "lower case note"
                 self.__value = self.__last_token
             else:
                 self.__value = ""
