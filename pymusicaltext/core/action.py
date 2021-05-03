@@ -49,9 +49,6 @@ class Action(MidiUnit):
         """
         returns the function that the action needs to execute
         """
-        # TODO: a digit is only singular, or
-        # any amount of digits counts as "one digit"?
-        # TODO: "?" and "." means "?.", in sequence,
         # or at least one of them? As individuals?
         actions: Dict[str, Callable[[], None]] = {
             " ": self.__increase_volume,
