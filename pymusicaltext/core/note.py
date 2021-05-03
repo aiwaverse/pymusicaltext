@@ -71,4 +71,5 @@ class Note(MidiUnit):
             "A": NOTE_A,
             "B": NOTE_B,
         }
-        return note_dict.get(note, None)
+        # get defaults to None if the key is not found
+        return note_dict.get(note)
