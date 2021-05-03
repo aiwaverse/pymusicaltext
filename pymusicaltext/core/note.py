@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 import mido
 
@@ -29,17 +29,24 @@ class Note(MidiUnit):
         with the on/off messages
         important to note: velocity is the "loudness" of the song
         """
+        # check for a None note (which is a "pause")
+        if self.__note:
+            note_value = self.__note + self.__info.octave
+            note_velocity = self.__info.volume
+        else:
+            note_value = 0
+            note_velocity = 0
         return [
             mido.Message(
                 "note_on",
-                note=self.__note + self.__info.octave,
-                velocity=self.__info.volume,
+                note=note_value,
+                velocity=note_velocity,
                 time=NOTE_DURATION,
             ),
             mido.Message(
                 "note_off",
-                note=self.__note + self.__info.octave,
-                velocity=self.__info.volume,
+                note=note_value,
+                velocity=note_velocity,
                 time=0,
             ),
         ]
@@ -51,7 +58,7 @@ class Note(MidiUnit):
         self.__info.octave += 2
 
     @staticmethod
-    def __decode_note(note: str) -> int:
+    def __decode_note(note: str) -> Optional[int]:
         """
         this function will decode the note, a string, to the midi format
         """
@@ -64,4 +71,5 @@ class Note(MidiUnit):
             "A": NOTE_A,
             "B": NOTE_B,
         }
-        return note_dict[note.upper()]
+        # get defaults to None if the key is not found
+        return note_dict.get(note)
