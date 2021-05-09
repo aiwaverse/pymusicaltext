@@ -31,7 +31,7 @@ class FileInput(InputForm):
     Nothing can be done on this class
     """
     def __init__(self, file_name: str) -> None:
-        with open(file_name, "r") as f:
+        with open(file_name, encoding="utf-8", "r") as f:
             self._content = f.read()
 
     @property
