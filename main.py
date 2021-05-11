@@ -7,34 +7,25 @@ import mido
 
 # %%
 
-
-def make_gui(title: str) -> sg.Window:
-    layout = [
-        [
-            sg.Multiline(
-                write_only=True,
-                size=(50, 20),
-                default_text="Decoded song goes here...",
-                key="-OUT-",
-            )
-        ],
-        [sg.Text("Enter the text:")],
-        [sg.Multiline(size=(50, 14), focus=True, key="-IN-")],
-        [sg.Button("Generate music"), sg.Exit()],
-    ]
-    return sg.Window(title, layout)
+# %%
+from pymusicaltext import Player
+from pymusicaltext.gui.layout import Layout
 
 
 def main() -> None:
-    gui = make_gui("PyMusicalText")
-    # a_player = Player("aaaaaaaaaaa", "file.mid")
+    layout = Layout("PyMusicalText")
+    window = layout.make_gui()
+
     while True:
-        event, values = gui.read()
+        event, values = window.read()
         if event == sg.WIN_CLOSED or event == "Exit":
             break
         if event == "Generate music":
-            gui["-OUT-"].update(values["-IN-"])
-    gui.close()
+            print(values)
+            a_player = Player(values['in'], "file.mid")
+            sg.popup('Musica Gerada com sucesso')
+
+    window.close()
 
 
 if __name__ == "__main__":
