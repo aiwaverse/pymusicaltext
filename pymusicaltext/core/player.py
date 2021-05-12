@@ -70,7 +70,7 @@ class Player:
         p = Parser(self.__input_string, tokens, True)
         self.__decoded_input = p.parse()
 
-    def __generate_notes(self) -> None:
+    def generate_notes(self) -> None:
         """
         this will use Generator to generate the notes
         that will go on the __notes list
@@ -117,7 +117,7 @@ class Player:
 
     def generate_file(self) -> None:
         """
-        writes the notes to the file, adds an
+         |s the notes to the file, adds an
         end_of_track meta message to the end too
         """
         save_file = mido.MidiFile()
