@@ -5,5 +5,7 @@ import mido
 
 class MidiUnit(abc.ABC):
     @abc.abstractmethod
-    def generate_message(self) -> Union[List[mido.Message], List[mido.MetaMessage]]:
+    def generate_message(
+        self,
+    ) -> Union[List[mido.Message], List[mido.MetaMessage]]:
         pass
