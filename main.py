@@ -8,6 +8,8 @@ import pymusicaltext.gui.constants as gui_constants
 from pymusicaltext import Player
 from pymusicaltext.gui.layout import Layout
 
+import os
+
 # %%
 
 tokens = [
@@ -40,8 +42,6 @@ def main() -> None:
 
     while True:
         event, values = window.read()
-        if event == sg.WIN_CLOSED or event == "Exit":
-            break
         if event == "Generate music":
             window[gui_constants.FILE_INFO_SECTION].update(visible=True)
             window[gui_constants.PLAYER_SECTION].update(visible=True)
@@ -65,13 +65,17 @@ def main() -> None:
             sg.popup('Musica Gerada com sucesso')
 
         if event == 'Start':
-            player.load_and_play_file(file.filename)
+            player.load_and_play_file(f"./.tmp/{file.filename}")
 
         if event == 'Pause':
             player.pause_song()
 
         if event == 'Stop':
             player.stop_song()
+
+        if event == sg.WIN_CLOSED or event == "Exit":
+            os.remove(f"./.tmp/{file.filename}")
+            break
 
     window.close()
 
