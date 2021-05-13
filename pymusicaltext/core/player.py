@@ -1,7 +1,7 @@
 from os.path import splitext
 from typing import List, Union
-
 import mido
+import pygame
 
 from pymusicaltext.core.constants import (
     BPM_DEFAULT,
@@ -40,6 +40,7 @@ class Player:
         self.__input_string = input_string
         self.__port = port
         self.__parse_input()
+        pygame.init()
 
     def __parse_input(self) -> None:
         """
@@ -120,7 +121,7 @@ class Player:
          |s the notes to the file, adds an
         end_of_track meta message to the end too
         """
-        save_file = mido.MidiFile()
+        save_file = mido.MidiFile(filename=self.__output_file_name)
         self.__notes.append(
             mido.MetaMessage("end_of_track", time=self.calculate_end_time())
         )
@@ -128,10 +129,19 @@ class Player:
         save_file.save(filename=self.__output_file_name)
         return save_file
 
-    def play_notes(self) -> None:
-        file = mido.MidiFile()
-        file.tracks.append(self.__notes)
-        with mido.open_output(name=self.__port) as p:
-            for msg in file.play():
-                print(msg)
-                p.send(msg)
+    @staticmethod
+    def load_and_play_file(file: mido.MidiFile) -> None:
+        pygame.mixer.music.load(file)
+        pygame.mixer.music.play()
+
+    @staticmethod
+    def play_song() -> None:
+        pygame.mixer.music.play()
+
+    @staticmethod
+    def pause_song() -> None:
+        pygame.mixer.music.pause()
+
+    @staticmethod
+    def stop_song() -> None:
+        pygame.mixer.music.stop()
