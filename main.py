@@ -1,35 +1,38 @@
 # %%
+from datetime import date
+
+import mido
+import PySimpleGUI as sg
+
+import pymusicaltext.gui.constants as gui_constants
 from pymusicaltext import Player
 from pymusicaltext.gui.layout import Layout
-import PySimpleGUI as sg
-import mido
-import pymusicaltext.gui.constants as gui_constants
-from datetime import date
 
 # %%
 
 tokens = [
-        "A",
-        "B",
-        "C",
-        "D",
-        "E",
-        "F",
-        "G",
-        " ",
-        "!",
-        "O",
-        "o",
-        "I",
-        "i",
-        "U",
-        "u",
-        "\n",
-        "?",
-        ".",
-        ";",
-        ",",
-    ]
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    " ",
+    "!",
+    "O",
+    "o",
+    "I",
+    "i",
+    "U",
+    "u",
+    "\n",
+    "?",
+    ".",
+    ";",
+    ",",
+]
+
 
 def main() -> None:
     layout = Layout("PyMusicalText")
@@ -45,7 +48,13 @@ def main() -> None:
 
             port = str(mido.get_output_names()[0])
 
-            player = Player(values[gui_constants.IN_TEXT_INPUT], values[gui_constants.IN_FILE_NAME], port)
+            if values[gui_constants.IN_FILE_INPUT]:
+                f = open(values[gui_constants.IN_FILE_INPUT], "r")
+                input_string = f.read()
+            else:
+                input_string = values[gui_constants.IN_TEXT_INPUT]
+
+            player = Player(input_string, values[gui_constants.IN_FILE_NAME], port)
             player.generate_notes()
             file = player.generate_file()
 
@@ -56,9 +65,17 @@ def main() -> None:
             sg.popup('Musica Gerada com sucesso')
 
         if event == 'Start':
-            player.play_notes()
+            player.load_and_play_file(file.filename)
+
+        if event == 'Pause':
+            player.pause_song()
+
+        if event == 'Stop':
+            player.stop_song()
 
     window.close()
+
+
 # %%
 
 if __name__ == "__main__":

@@ -121,16 +121,17 @@ class Player:
          |s the notes to the file, adds an
         end_of_track meta message to the end too
         """
-        save_file = mido.MidiFile(filename=self.__output_file_name)
+        save_file = mido.MidiFile()
+        save_file.filename = self.__output_file_name
         self.__notes.append(
             mido.MetaMessage("end_of_track", time=self.calculate_end_time())
         )
         save_file.tracks.append(self.__notes)
-        save_file.save(filename=self.__output_file_name)
+        save_file.save(filename=f"./.tmp/{self.__output_file_name}")
         return save_file
 
     @staticmethod
-    def load_and_play_file(file: mido.MidiFile) -> None:
+    def load_and_play_file(file: str) -> None:
         pygame.mixer.music.load(file)
         pygame.mixer.music.play()
 
