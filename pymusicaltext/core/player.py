@@ -138,9 +138,9 @@ class Player:
         save_file = mido.MidiFile()
         save_file.filename = name
         save_file.tracks.append(self.__notes)
-        save_file.save(filename=self.__output_file_name)
+        save_file.save(filename=f".tmp/{name}.mid")
         FluidSynth().midi_to_audio(
-            self.__output_file_name, f".tmp/{name}.wav"
+            f".tmp/{name}.mid", f".tmp/{name}.wav"
         )
         return save_file
 
