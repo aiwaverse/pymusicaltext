@@ -2,6 +2,7 @@ from os.path import splitext
 from typing import List, Union
 import mido
 import pygame
+from midi2audio import FluidSynth
 
 from pymusicaltext.core.constants import (
     BPM_DEFAULT,
@@ -116,22 +117,33 @@ class Player:
             total_time += msg.time
         return total_time
 
+    @staticmethod
+    def file_correct_name(name: str) -> str:
+        if name.endswith(".midi"):
+            return name.replace(".midi", "")
+        if name.endswith(".mid"):
+            return name.replace(".mid", "")
+        else:
+            return name
+
     def generate_file(self) -> mido.MidiFile:
         """
          |s the notes to the file, adds an
         end_of_track meta message to the end too
         """
+        name = self.file_correct_name(self.__output_file_name)
         save_file = mido.MidiFile()
-        save_file.filename = self.__output_file_name
-        self.__notes.append(
-            mido.MetaMessage("end_of_track", time=self.calculate_end_time())
-        )
+        save_file.filename = name
         save_file.tracks.append(self.__notes)
-        save_file.save(filename=f"./.tmp/{self.__output_file_name}")
+        save_file.save(filename=self.__output_file_name)
+        FluidSynth().midi_to_audio(
+            self.__output_file_name, f".tmp/{name}.wav"
+        )
         return save_file
 
     @staticmethod
     def load_and_play_file(file: str) -> None:
+        pygame.mixer.music.set_volume(1)
         pygame.mixer.music.load(file)
         pygame.mixer.music.play()
 

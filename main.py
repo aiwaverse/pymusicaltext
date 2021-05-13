@@ -54,23 +54,31 @@ def main() -> None:
             else:
                 input_string = values[gui_constants.IN_TEXT_INPUT]
 
-            player = Player(input_string, values[gui_constants.IN_FILE_NAME], port)
+            player = Player(
+                input_string, values[gui_constants.IN_FILE_NAME], port
+            )
             player.generate_notes()
             file = player.generate_file()
 
-            window[gui_constants.TEXT_FILE_NAME].update(values[gui_constants.IN_FILE_NAME])
+            window[gui_constants.TEXT_FILE_NAME].update(
+                values[gui_constants.IN_FILE_NAME]
+            )
             window[gui_constants.TEXT_DURATION].update(f"{file.length}s")
-            window[gui_constants.TEXT_CREATED_AT].update(date.today().strftime("%d/%m/%Y"))
+            window[gui_constants.TEXT_CREATED_AT].update(
+                date.today().strftime("%d/%m/%Y")
+            )
 
-            sg.popup('Musica Gerada com sucesso')
+            sg.popup("Musica Gerada com sucesso")
 
-        if event == 'Start':
-            player.load_and_play_file(file.filename)
+        if event == "Start":
+            player.load_and_play_file(
+                f".tmp/{player.file_correct_name(file.filename)}.wav"
+            )
 
-        if event == 'Pause':
+        if event == "Pause":
             player.pause_song()
 
-        if event == 'Stop':
+        if event == "Stop":
             player.stop_song()
 
     window.close()
