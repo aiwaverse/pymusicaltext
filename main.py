@@ -70,15 +70,10 @@ def main() -> None:
 
             sg.popup("Musica Gerada com sucesso")
 
-<<<<<<< HEAD
         if event == "Start":
             player.load_and_play_file(
                 f".tmp/{player.file_correct_name(file.filename)}.wav"
             )
-=======
-        if event == 'Start':
-            player.load_and_play_file(f"./.tmp/{file.filename}")
->>>>>>> 4ee9b42b536aa539381279939cd9b74e9848d77e
 
         if event == "Pause":
             player.pause_song()
