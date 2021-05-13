@@ -1,4 +1,5 @@
 from os.path import splitext
+import os
 from typing import List, Union
 import mido
 import pygame
@@ -42,6 +43,8 @@ class Player:
         self.__port = port
         self.__parse_input()
         pygame.init()
+        if not os.path.exists(".tmp"):
+            os.mkdir(".tmp")
 
     def __parse_input(self) -> None:
         """

@@ -82,7 +82,7 @@ def main() -> None:
             player.stop_song()
 
         if event == sg.WIN_CLOSED or event == "Exit":
-            os.remove(f"./.tmp/{file.filename}")
+            os.remove(f".tmp/{file.filename}.wav")
             break
 
     window.close()
