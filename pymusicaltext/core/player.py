@@ -105,7 +105,7 @@ class Player:
             ),
         ]
 
-    def __calculate_end_time(self) -> int:
+    def calculate_end_time(self) -> int:
         """
         uses the time attribute on every note
         to calculate the end_of_track time
@@ -115,21 +115,23 @@ class Player:
             total_time += msg.time
         return total_time
 
-    def generate_file(self) -> None:
+    def generate_file(self) -> mido.MidiFile:
         """
          |s the notes to the file, adds an
         end_of_track meta message to the end too
         """
         save_file = mido.MidiFile()
         self.__notes.append(
-            mido.MetaMessage("end_of_track", time=self.__calculate_end_time())
+            mido.MetaMessage("end_of_track", time=self.calculate_end_time())
         )
         save_file.tracks.append(self.__notes)
         save_file.save(filename=self.__output_file_name)
+        return save_file
 
     def play_notes(self) -> None:
         file = mido.MidiFile()
-        file.tracks[0] = self.__notes
+        file.tracks.append(self.__notes)
         with mido.open_output(name=self.__port) as p:
             for msg in file.play():
+                print(msg)
                 p.send(msg)
