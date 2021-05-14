@@ -130,8 +130,9 @@ class Layout:
                             size=(30, 1),
                         ),
                     ],
+                    [btn("Baixar")]
                 ],
-                size=(370, 120),
+                size=(370, 150),
                 element_justification="left",
                 vertical_alignment="top",
                 visible=False,

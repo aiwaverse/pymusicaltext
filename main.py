@@ -56,7 +56,7 @@ def main() -> None:
                 continue
             window[gui_constants.FILE_INFO_SECTION].update(visible=True)
             window[gui_constants.PLAYER_SECTION].update(visible=True)
-            window["-SAVE-FILE-"].update(disabled=False)
+
             port = str(mido.get_output_names()[0])
 
             if values[gui_constants.IN_FILE_INPUT]:
@@ -102,14 +102,9 @@ def main() -> None:
             window["progressbar"].update(0)
             curr_fill = -time_unit
 
-        # não feito
-        if event == "-SAVE-FILE-":
-            print("Atingido")
-            target = values["-SAVE-FILE-"]
-            print(target)
-            #shutil.copy(
-            #    f".tmp/{player.file_correct_name(file.filename)}.mid", target
-            #)
+        if event == "Baixar":
+            selected_folder = sg.popup_get_folder('Por favor, entre com a pasta de destino', title="Baixar arquivo")
+            shutil.copy(f".tmp/{player.file_correct_name(file.filename)}.wav", selected_folder)
 
         if event == sg.WIN_CLOSED or event == "Exit":
             os.remove(f".tmp/{file.filename}.wav")
