@@ -6,6 +6,7 @@ import PySimpleGUI as sg
 
 from pymusicaltext.gui.constants import (
     DOWNLOAD_BUTTON,
+    EXIT,
     GENERATE_MUSIC,
     PAUSE,
     START,
@@ -45,7 +46,7 @@ def main() -> None:
                 program_gui.download_file(selected_folder)
         if event == VOLUME_CHANGE:
             program_gui.change_volume(values[VOLUME_CHANGE])
-        if event in (sg.WIN_CLOSED, "Exit"):
+        if event in (sg.WIN_CLOSED, EXIT):
             program_gui.close_player()
             break
         if program_gui.playing:

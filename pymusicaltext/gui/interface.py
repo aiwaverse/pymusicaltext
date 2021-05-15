@@ -14,6 +14,7 @@ from pymusicaltext.core.input_form import FileInput, StringInput
 from pymusicaltext.core.player import Player
 from pymusicaltext.gui.constants import (
     DOWNLOAD_BUTTON,
+    EXIT,
     FILE_INFO_SECTION,
     GENERATE_MUSIC,
     IN_FILE_INPUT,
@@ -290,14 +291,14 @@ class GUI:
         layout = [
             [
                 sg.Text(
-                    "Py Musical Text",
+                    "PyMusicalText",
                     text_color="#fff",
                     font=("Roboto", 15, "bold"),
                 )
             ],
             [self.input_text_col, self.file_name_col],
             [self.file_info_col, self.player_col],
-            [sg.Exit(button_color="#dc3545")],
+            [sg.Exit("Sair", button_color="#dc3545", key=EXIT)],
         ]
 
         return sg.Window(self.__title, layout)
