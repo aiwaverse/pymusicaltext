@@ -2,7 +2,6 @@ import os
 
 import PySimpleGUI as sg
 from PySimpleGUI import Button, Text
-from PySimpleGUI.PySimpleGUI import FileSaveAs
 
 import pymusicaltext.gui.constants as gui_constants
 
@@ -35,7 +34,7 @@ def image_btn(key: str, file: str) -> Button:
     )
 
 
-def text(label: str, font_weight="bold", key="", size=(None, None)) -> Text:
+def text(label: str, font_weight="bold", key=None, size=(None, None)) -> Text:
     return sg.Text(
         label,
         size=size,
@@ -55,7 +54,7 @@ class Layout:
         input_text_col = sg.pin(
             sg.Column(
                 [
-                    [text("Type a Text")],
+                    [text("Digite um texto")],
                     [
                         sg.Multiline(
                             font=("Ubuntu", 11),
@@ -64,14 +63,14 @@ class Layout:
                             focus=True,
                         ),
                     ],
-                    [text("Or choose a file:")],
+                    [text("Ou escolha um arquivo:")],
                     [
                         sg.Input(
                             size=(25, 20),
                             font=("Ubuntu", 12),
                             key=gui_constants.IN_FILE_INPUT,
                         ),
-                        sg.FileBrowse(font=("Ubuntu", 12)),
+                        sg.FileBrowse("Procurar",font=("Ubuntu", 12)),
                     ],
                 ],
                 size=(370, 300),
@@ -91,7 +90,7 @@ class Layout:
                             key=gui_constants.IN_FILE_NAME,
                         ),
                     ],
-                    [btn("Generate music")],
+                    [btn("Gerar música")],
                 ],
                 size=(370, 300),
                 element_justification="left",
@@ -171,14 +170,6 @@ class Layout:
                         sg.Text(" " * 2, background_color=player_col_bg),
                         image_btn("Stop", STOP_IMG),
                         sg.Text(" " * 4, background_color=player_col_bg),
-                        sg.Slider(
-                            range=(0, 10),
-                            default_value=10,
-                            size=(10, 10),
-                            orientation="horizontal",
-                            font=("Helvetica", 10),
-                            background_color="#335267",
-                        ),
                     ],
                 ],
                 size=(320, 100),
@@ -200,7 +191,7 @@ class Layout:
             ],
             [input_text_col, file_name_col],
             [file_info_col, player_col],
-            [sg.Exit(button_color="#dc3545")],
+            [sg.Exit("Sair", button_color="#dc3545")],
         ]
 
         return sg.Window(self.title, layout)

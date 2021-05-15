@@ -106,7 +106,7 @@ def main() -> None:
             selected_folder = sg.popup_get_folder('Por favor, entre com a pasta de destino', title="Baixar arquivo")
             shutil.copy(f".tmp/{player.file_correct_name(file.filename)}.wav", selected_folder)
 
-        if event == sg.WIN_CLOSED or event == "Exit":
+        if event == sg.WIN_CLOSED or event == "Sair":
             os.remove(f".tmp/{file.filename}.wav")
             os.remove(f".tmp/{file.filename}.mid")
             break
