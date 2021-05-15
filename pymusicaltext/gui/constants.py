@@ -1,4 +1,4 @@
-
+# pylint: disable=missing-module-docstring
 TEXT_FILE_NAME: str = "-TEXT_FILE_NAME-"
 TEXT_CREATED_AT: str = "-TEXT_CREATED_AT-"
 TEXT_DURATION: str = "-TEXT_DURATION-"
@@ -10,3 +10,7 @@ PLAYER_SECTION: str = "-PLAYER_SECTION-"
 DOWNLOAD_BUTTON: str = "-DOWNLOAD_BUTTON-"
 PROGRESS_BAR: str = "-PROGRESS-BAR-"
 VOLUME_CHANGE: str = "-VOLUME-CHANGE-"
+GENERATE_MUSIC: str = "-GENERATE-MUSIC-"
+START: str = "-START-"
+STOP: str = "-STOP-"
+PAUSE: str = "-PAUSE-"
