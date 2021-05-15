@@ -95,29 +95,22 @@ class Player:
             ),
         ]
 
-    def calculate_end_time(self) -> int:
-        """
-        uses the time attribute on every note
-        to calculate the end_of_track time
-        """
-        total_time = 0
-        for msg in self.__notes:
-            total_time += msg.time
-        return total_time
-
     @staticmethod
     def file_correct_name(name: str) -> str:
+        """
+        Generates the 'correct' name of the file
+        That is, removes the extension
+        """
         if name.endswith(".midi"):
             return name.replace(".midi", "")
         if name.endswith(".mid"):
             return name.replace(".mid", "")
-        else:
-            return name
+        return name
 
     def generate_file(self) -> mido.MidiFile:
         """
-         |s the notes to the file, adds an
-        end_of_track meta message to the end too
+        Saves the notes to a midi file, and generates a .wav
+        file to played
         """
         name = self.file_correct_name(self.__output_file_name)
         save_file = mido.MidiFile()
@@ -131,22 +124,38 @@ class Player:
 
     @staticmethod
     def load_and_play_file(file: str) -> None:
+        """
+        Sets the volume to 1, loads the file intp pygame
+        and starts playing
+        """
         pygame.mixer.music.set_volume(1)
         pygame.mixer.music.load(file)
         pygame.mixer.music.play()
 
     @staticmethod
     def play_song() -> None:
+        """
+        Plays the song
+        """
         pygame.mixer.music.play()
 
     @staticmethod
     def pause_song() -> None:
+        """
+        Pauses the song
+        """
         pygame.mixer.music.pause()
 
     @staticmethod
     def stop_song() -> None:
+        """
+        Stops the song
+        """
         pygame.mixer.music.stop()
 
     @staticmethod
     def change_volume(vol: int) -> None:
+        """
+        Changes the volume of the song to given vol
+        """
         pygame.mixer.music.set_volume(vol)

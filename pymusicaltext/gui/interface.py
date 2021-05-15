@@ -55,6 +55,7 @@ class GUI:
         self.__current_progress = 0
         self.__playing = False
         self.__song_loaded = False
+        self.__last_progress_bar_change = None
 
     @property
     def file_name(self) -> str:
@@ -176,7 +177,8 @@ class GUI:
         self.window[PROGRESS_BAR].update(0)
         self.__current_progress = self.__time_unit()
 
-    def check_file_name(self, file_name: str) -> bool:
+    @staticmethod
+    def check_file_name(file_name: str) -> bool:
         """
         Checks if the file name ends on .mid
         """
@@ -325,7 +327,7 @@ class GUI:
         )
 
     @property
-    def input_text_col(self):
+    def input_text_col(self) -> sg.Column:
         """
         Property for the input text column
         """
@@ -358,7 +360,7 @@ class GUI:
         )
 
     @property
-    def file_info_col(self):
+    def file_info_col(self) -> sg.Column:
         """
         Property for the file information column
         """
@@ -404,7 +406,7 @@ class GUI:
         )
 
     @property
-    def player_col(self):
+    def player_col(self) -> sg.Column:
         """
         Property for the music player column
         """

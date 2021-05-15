@@ -31,6 +31,7 @@ def main() -> None:
                 continue
         if event == START:
             program_gui.start_song()
+            program_gui.change_volume(values[VOLUME_CHANGE])
         if event == PAUSE:
             program_gui.pause_song()
         if event == STOP:
