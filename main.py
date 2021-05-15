@@ -5,14 +5,13 @@ from pymusicaltext.gui.constants import VOLUME_CHANGE
 import mido
 import PySimpleGUI as sg
 
-from pymusicaltext.gui.gui import GUI
+from pymusicaltext.gui.interface import GUI
 
 
 def main() -> None:
     program_gui = GUI("PyMusicalText")
     while True:
         event, values = program_gui.read(timeout=1000)
-        print(event)
         if event == "Gerar música" and not program_gui.empty_input():
             program_gui.create_player()
             sg.popup("Musica Gerada com sucesso")
