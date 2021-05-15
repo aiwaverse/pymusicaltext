@@ -84,19 +84,6 @@ class Player:
             self.__notes += element.generate_message()
 
     @property
-    def input_string(self) -> str:
-        return self.__input_string
-
-    @input_string.setter
-    def input_string(self, string: str) -> None:
-        """
-        loads a new string into the object
-        useful for reading from a text box
-        """
-        self.__input_string = string
-        self.__parse_input()
-
-    @property
     def __initial_midi_file(self) -> List[mido.MetaMessage]:
         """
         a function that generates the basic meta_messages for the track
