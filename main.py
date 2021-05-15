@@ -1,121 +1,41 @@
 # %%
 from datetime import date, time
+from pymusicaltext.gui.constants import VOLUME_CHANGE
 
 import mido
 import PySimpleGUI as sg
 
-import pymusicaltext.gui.constants as gui_constants
-from pymusicaltext import Player
-from pymusicaltext.gui.layout import Layout
-
-import os
-import shutil
-
-# %%
-
-tokens = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    " ",
-    "!",
-    "O",
-    "o",
-    "I",
-    "i",
-    "U",
-    "u",
-    "\n",
-    "?",
-    ".",
-    ";",
-    ",",
-]
+from pymusicaltext.gui.interface import GUI
 
 
 def main() -> None:
-    layout = Layout("PyMusicalText")
-    window = layout.make_gui()
-    playing = False
-    time_unit = 0
-    curr_fill = 0
-    song_loaded = False
+    program_gui = GUI("PyMusicalText")
     while True:
-        event, values = window.read(timeout=1000)
-        if event == "Generate music":
-            if (
-                not values[gui_constants.IN_FILE_INPUT]
-                and values[gui_constants.IN_TEXT_INPUT] == "\n"
-            ):
-                continue
-            if not values[gui_constants.IN_FILE_NAME]:
-                continue
-            window[gui_constants.FILE_INFO_SECTION].update(visible=True)
-            window[gui_constants.PLAYER_SECTION].update(visible=True)
-
-            port = str(mido.get_output_names()[0])
-
-            if values[gui_constants.IN_FILE_INPUT]:
-                f = open(values[gui_constants.IN_FILE_INPUT], "r")
-                input_string = f.read()
-            else:
-                input_string = values[gui_constants.IN_TEXT_INPUT]
-
-            player = Player(
-                input_string, values[gui_constants.IN_FILE_NAME], port
-            )
-            player.generate_notes()
-            file = player.generate_file()
-            time_unit = 100 / round(file.length)
-            window[gui_constants.TEXT_FILE_NAME].update(
-                values[gui_constants.IN_FILE_NAME]
-            )
-            window[gui_constants.TEXT_DURATION].update(f"{file.length}s")
-            window[gui_constants.TEXT_CREATED_AT].update(
-                date.today().strftime("%d/%m/%Y")
-            )
-            window["progressbar"].update(0)
-            curr_fill = -time_unit
-
+        event, values = program_gui.read(timeout=1000)
+        if event == "Gerar música" and not program_gui.empty_input():
+            program_gui.create_player()
             sg.popup("Musica Gerada com sucesso")
+            program_gui.make_full_gui_visible()
         if event == "Start":
-            if song_loaded:
-                player.play_song()
-            else:
-                player.load_and_play_file(
-                    f".tmp/{player.file_correct_name(file.filename)}.wav"
-                )
-                song_loaded = True
-            playing = True
-
+            program_gui.start_song()
         if event == "Pause":
-            playing = False
-            player.pause_song()
-
+            program_gui.pause_song()
         if event == "Stop":
-            playing = False
-            player.stop_song()
-            window["progressbar"].update(0)
-            curr_fill = -time_unit
-
+            program_gui.stop_song()
         if event == "Baixar":
-            selected_folder = sg.popup_get_folder('Por favor, entre com a pasta de destino', title="Baixar arquivo")
-            shutil.copy(f".tmp/{player.file_correct_name(file.filename)}.wav", selected_folder)
-
-        if event == sg.WIN_CLOSED or event == "Sair":
-            os.remove(f".tmp/{file.filename}.wav")
-            os.remove(f".tmp/{file.filename}.mid")
+            selected_folder = sg.popup_get_folder(
+                "Por favor, entre com a pasta de destino",
+                title="Baixar arquivo",
+            )
+            if selected_folder:
+                program_gui.download_file(selected_folder)
+        if event == VOLUME_CHANGE:
+            program_gui.change_volume(values[VOLUME_CHANGE])
+        if event == sg.WIN_CLOSED or event == "Exit":
+            program_gui.close_player()
             break
-
-        if playing:
-            window["progressbar"].update(time_unit + curr_fill)
-            curr_fill += time_unit
-
-    window.close()
+        if program_gui.playing:
+            program_gui.update_progress_bar()
 
 
 # %%

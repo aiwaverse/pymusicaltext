@@ -21,8 +21,7 @@ class Player:
     def __init__(
         self,
         input_string: str = "",
-        output_file_name: str = "",
-        port: str = "",
+        output_file_name: str = ""
     ) -> None:
         """
         initializes the basic parameters, the "medium" volume
@@ -40,7 +39,6 @@ class Player:
             Union[mido.MetaMessage, mido.Message]
         ] = self.__initial_midi_file
         self.__input_string = input_string
-        self.__port = port
         self.__parse_input()
         pygame.init()
         if not os.path.exists(".tmp"):
@@ -161,3 +159,7 @@ class Player:
     @staticmethod
     def stop_song() -> None:
         pygame.mixer.music.stop()
+
+    @staticmethod
+    def change_volume(vol: int) -> None:
+        pygame.mixer.music.set_volume(vol)
