@@ -44,7 +44,6 @@ class GUI:
         self.__pause_img = os.path.join(
             dir_path, "assets", "icons", "pause.png"
         )
-        self.__key_count = 0
         self.__window = self._create_gui()
         self.__player = None
         self.__midi_file: Optional[MidiFile] = None
@@ -82,23 +81,26 @@ class GUI:
         Updates the player values after a new song is loaded
         """
         _, values = self.read()
-        self.window[TEXT_FILE_NAME].update(values[IN_FILE_NAME])
+        self.window[TEXT_FILE_NAME].update(f"{self.__midi_file.filename}.wav")
         self.window[TEXT_DURATION].update(f"{self.__midi_file.length}s")
         self.window[TEXT_CREATED_AT].update(date.today().strftime("%d/%m/%Y"))
         self.window[PROGRESS_BAR].update(0)
-        self.__current_progress = -self.__time_unit()
+        self.__current_progress = 0
         self.__song_loaded = False
         self.__playing = False
         self.__last_progress_bar_change = None
+
+    def __delete_generated_files(self) -> None:
+        if self.__midi_file:
+            os.remove(f".tmp/{self.__midi_file.filename}.wav")
+            os.remove(f".tmp/{self.__midi_file.filename}.mid")
 
     def close_player(self):
         """
         Removes temporary files, closes the window and
         deletes the attribute.
         """
-        if self.__midi_file:
-            os.remove(f".tmp/{self.__midi_file.filename}.wav")
-            os.remove(f".tmp/{self.__midi_file.filename}.mid")
+        self.__delete_generated_files()
         self.window.close()
 
     def update_progress_bar(self) -> None:
@@ -175,6 +177,7 @@ class GUI:
         Creates the player, if a file is provided, uses the file.
         Otherwise, uses the input string.
         """
+        self.__delete_generated_files()
         _, values = self.read()
         if values[IN_FILE_INPUT]:
             text = FileInput(values[IN_FILE_INPUT])
@@ -264,6 +267,7 @@ class GUI:
         """
         Creates the GUI with the right attributes
         """
+        sg.theme("DarkBlue17")
         layout = [
             [
                 sg.Text(
