@@ -74,6 +74,8 @@ class GUI:
         """
         Time unit to be used on the progress bar
         """
+        if round(self.__midi_file.length) == 0:
+            return 100
         return 100 / round(self.__midi_file.length)
 
     def __initialize_player(self) -> None:
@@ -195,11 +197,17 @@ class GUI:
         """
         _, values = self.read()
         if values[IN_FILE_INPUT]:
-            text = FileInput(values[IN_FILE_INPUT])
+            try:
+                text = FileInput(values[IN_FILE_INPUT])
+            except FileNotFoundError:
+                sg.popup_error("Erro de leitura do arquivo, verifique se o mesmo existe.")
+                raise ValueError(
+                    "Erro de leitura do arquivo, verifique se o mesmo existe."
+                )
         else:
             text = StringInput(values[IN_TEXT_INPUT])
         if not self.check_file_name(values[IN_FILE_NAME]):
-            raise ValueError("Wrong file name.")
+            raise ValueError("Nome do arquivo incorreto.")
         self.__delete_generated_files()
         self.__player = Player(text.content, values[IN_FILE_NAME])
         self.__initialize_player()
