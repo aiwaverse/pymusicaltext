@@ -1,16 +1,27 @@
-from datetime import date
-import time
+"""
+The interface module contains a single
+class, the GUI, which is used on the program
+"""
 import os
 import shutil
+import time
+from datetime import date
 from typing import Optional, Tuple
 
-from PySimpleGUI.PySimpleGUI import Column, R
+import PySimpleGUI as sg
 from mido.midifiles.midifiles import MidiFile
+from pymusicaltext.core.input_form import FileInput, StringInput
+from pymusicaltext.core.player import Player
 from pymusicaltext.gui.constants import (
+    DOWNLOAD_BUTTON,
     FILE_INFO_SECTION,
+    GENERATE_MUSIC,
     IN_FILE_INPUT,
     IN_FILE_NAME,
     IN_TEXT_INPUT,
+    START,
+    PAUSE,
+    STOP,
     PLAYER_SECTION,
     PROGRESS_BAR,
     TEXT_CREATED_AT,
@@ -18,10 +29,6 @@ from pymusicaltext.gui.constants import (
     TEXT_FILE_NAME,
     VOLUME_CHANGE,
 )
-
-import PySimpleGUI as sg
-from pymusicaltext.core.player import Player
-from pymusicaltext.core.input_form import FileInput, StringInput
 
 
 class GUI:
@@ -38,9 +45,7 @@ class GUI:
         self.__start_img = os.path.join(
             dir_path, "assets", "icons", "play.png"
         )
-        self.__stop_img = os.path.join(
-            dir_path, "assets", "icons", "stop.png"
-        )
+        self.__stop_img = os.path.join(dir_path, "assets", "icons", "stop.png")
         self.__pause_img = os.path.join(
             dir_path, "assets", "icons", "pause.png"
         )
@@ -80,7 +85,6 @@ class GUI:
         """
         Updates the player values after a new song is loaded
         """
-        _, values = self.read()
         self.window[TEXT_FILE_NAME].update(f"{self.__midi_file.filename}.wav")
         self.window[TEXT_DURATION].update(f"{self.__midi_file.length}s")
         self.window[TEXT_CREATED_AT].update(date.today().strftime("%d/%m/%Y"))
@@ -140,7 +144,7 @@ class GUI:
         Changes the volume of the song being played with vol
         Divided by 10 because of how pygame uses volume
         """
-        self.__player.change_volume(vol/10)
+        self.__player.change_volume(vol / 10)
 
     def start_song(self) -> None:
         """
@@ -172,17 +176,28 @@ class GUI:
         self.window[PROGRESS_BAR].update(0)
         self.__current_progress = self.__time_unit()
 
+    def check_file_name(self, file_name: str) -> bool:
+        """
+        Checks if the file name ends on .mid
+        """
+        if not file_name.endswith(".mid"):
+            sg.popup_error("O nome do arquivo deve terminar em .mid")
+            return False
+        return True
+
     def create_player(self) -> None:
         """
         Creates the player, if a file is provided, uses the file.
         Otherwise, uses the input string.
         """
-        self.__delete_generated_files()
         _, values = self.read()
         if values[IN_FILE_INPUT]:
             text = FileInput(values[IN_FILE_INPUT])
         else:
             text = StringInput(values[IN_TEXT_INPUT])
+        if not self.check_file_name(values[IN_FILE_NAME]):
+            raise ValueError("Wrong file name.")
+        self.__delete_generated_files()
         self.__player = Player(text.content, values[IN_FILE_NAME])
         self.__initialize_player()
         self.__update_player_values()
@@ -219,7 +234,8 @@ class GUI:
         """
         return self.window.read(timeout=timeout)
 
-    def _make_button(self, title: str, key=None) -> sg.Button:
+    @staticmethod
+    def _make_button(title: str, key=None) -> sg.Button:
         """
         Makes a button with predefined attributes
         """
@@ -232,8 +248,8 @@ class GUI:
             key=key,
         )
 
+    @staticmethod
     def _make_text(
-        self,
         label: str,
         font_weight="bold",
         key="",
@@ -250,7 +266,8 @@ class GUI:
             key=key,
         )
 
-    def _make_button_with_image(self, key: str, file: str) -> sg.Button:
+    @staticmethod
+    def _make_button_with_image(key: str, file: str) -> sg.Button:
         """
         Makes a button with the image given on file.
         """
@@ -284,7 +301,10 @@ class GUI:
         return sg.Window(self.__title, layout)
 
     @property
-    def file_name_col(self) -> Column:
+    def file_name_col(self) -> sg.Column:
+        """
+        Property for the file name collumn
+        """
         return sg.pin(
             sg.Column(
                 [
@@ -296,7 +316,7 @@ class GUI:
                             key=IN_FILE_NAME,
                         ),
                     ],
-                    [self._make_button("Gerar música")],
+                    [self._make_button("Gerar música", key=GENERATE_MUSIC)],
                 ],
                 size=(370, 300),
                 element_justification="left",
@@ -306,6 +326,9 @@ class GUI:
 
     @property
     def input_text_col(self):
+        """
+        Property for the input text column
+        """
         return sg.pin(
             sg.Column(
                 [
@@ -336,6 +359,9 @@ class GUI:
 
     @property
     def file_info_col(self):
+        """
+        Property for the file information column
+        """
         return sg.pin(
             sg.Column(
                 [
@@ -367,7 +393,7 @@ class GUI:
                             size=(30, 1),
                         ),
                     ],
-                    [self._make_button("Baixar")],
+                    [self._make_button("Baixar", key=DOWNLOAD_BUTTON)],
                 ],
                 size=(370, 150),
                 element_justification="left",
@@ -379,6 +405,9 @@ class GUI:
 
     @property
     def player_col(self):
+        """
+        Property for the music player column
+        """
         return sg.pin(
             sg.Column(
                 [
@@ -402,15 +431,11 @@ class GUI:
                         )
                     ],
                     [
-                        self._make_button_with_image(
-                            "Start", self.__start_img
-                        ),
+                        self._make_button_with_image(START, self.__start_img),
                         sg.Text(" " * 2, background_color="#335267"),
-                        self._make_button_with_image(
-                            "Pause", self.__pause_img
-                        ),
+                        self._make_button_with_image(PAUSE, self.__pause_img),
                         sg.Text(" " * 2, background_color="#335267"),
-                        self._make_button_with_image("Stop", self.__stop_img),
+                        self._make_button_with_image(STOP, self.__stop_img),
                         sg.Text(" " * 4, background_color="#335267"),
                         sg.Slider(
                             range=(0, 10),
@@ -421,7 +446,7 @@ class GUI:
                             background_color="#335267",
                             key=VOLUME_CHANGE,
                             enable_events=True,
-                            disable_number_display=True
+                            disable_number_display=True,
                         ),
                     ],
                 ],
