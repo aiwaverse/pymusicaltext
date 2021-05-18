@@ -134,6 +134,7 @@ class Player:
         pygame.mixer.music.set_volume(1)
         pygame.mixer.music.load(file)
         pygame.mixer.music.play()
+        self.__paused = False
 
     def play_song(self) -> None:
         """
