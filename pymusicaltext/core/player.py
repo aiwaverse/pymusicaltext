@@ -42,6 +42,7 @@ class Player:
             Union[mido.MetaMessage, mido.Message]
         ] = self.__initial_midi_file
         self.__input_string = input_string
+        self.__paused = False
         self.__parse_input()
         pygame.init()
         if not os.path.exists(".tmp"):
@@ -125,8 +126,7 @@ class Player:
         )
         return save_file
 
-    @staticmethod
-    def load_and_play_file(file: str) -> None:
+    def load_and_play_file(self, file: str) -> None:
         """
         Sets the volume to 1, loads the file intp pygame
         and starts playing
@@ -135,29 +135,30 @@ class Player:
         pygame.mixer.music.load(file)
         pygame.mixer.music.play()
 
-    @staticmethod
-    def play_song() -> None:
+    def play_song(self) -> None:
         """
         Plays the song
         """
-        pygame.mixer.music.unpause()
+        if self.__paused:
+            pygame.mixer.music.unpause()
+            self.__paused = False
+        else:
+            pygame.mixer.music.play()
 
-    @staticmethod
-    def pause_song() -> None:
+    def pause_song(self) -> None:
         """
         Pauses the song
         """
         pygame.mixer.music.pause()
+        self.__paused = True
 
-    @staticmethod
-    def stop_song() -> None:
+    def stop_song(self) -> None:
         """
         Stops the song
         """
         pygame.mixer.music.stop()
 
-    @staticmethod
-    def change_volume(vol: int) -> None:
+    def change_volume(self, vol: int) -> None:
         """
         Changes the volume of the song to given vol
         """
