@@ -137,7 +137,7 @@ class Player:
         """
         Plays the song
         """
-        pygame.mixer.music.play()
+        pygame.mixer.music.unpause()
 
     @staticmethod
     def pause_song() -> None:
