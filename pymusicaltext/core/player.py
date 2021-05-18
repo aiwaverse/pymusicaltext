@@ -18,6 +18,9 @@ from .parser import Parser
 
 
 class Player:
+    """
+    The Player class controls the music player, by using all the other classes
+    """
     def __init__(
         self,
         input_string: str = "",

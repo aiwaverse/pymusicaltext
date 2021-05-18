@@ -200,7 +200,9 @@ class GUI:
             try:
                 text = FileInput(values[IN_FILE_INPUT])
             except FileNotFoundError:
-                sg.popup_error("Erro de leitura do arquivo, verifique se o mesmo existe.")
+                sg.popup_error(
+                    "Erro de leitura do arquivo, verifique se o mesmo existe."
+                )
                 raise ValueError(
                     "Erro de leitura do arquivo, verifique se o mesmo existe."
                 )
